@@ -20,24 +20,15 @@ func _ready():
 	aStarGrid.update();
 
 func _input(event):
-	set_new_cursor_location();
-	
 	if event.is_action_pressed("Move") == true:
 		start_path();
 
 func _physics_process(delta):
 	move_from_path();
 
-
-func set_new_cursor_location():
-	var newPos = tile_map.local_to_map(get_global_mouse_position());
-	if (mapFromMouse != newPos):
-		tile_map.erase_cell(terrainMap.layersIDs.CURSOR, mapFromMouse);
-		mapFromMouse = newPos;
-	tile_map.set_cell(2, mapFromMouse, 2, Vector2i(0,0));
-
 func start_path():	
 	var id_path
+	var mapFromMouse = tile_map.local_to_map(get_global_mouse_position());
 	
 	if (is_moving):
 		id_path = aStarGrid.get_id_path(
