@@ -4,6 +4,8 @@ var current_id_path: Array[Vector2i];
 
 @onready var tile_map = $"../../TileMap";
 @onready var turn_count = $"../../Labels/TurnCount";
+@onready var plant_manager = $"../Plants";
+
 
 var target_position: Vector2
 var is_moving: bool
@@ -20,6 +22,12 @@ func _ready():
 	aStarGrid.update();
 
 
+
+# Remove this as soon as I connect this to menus
+func _input(event):
+	if event.is_action_pressed("Plant") == true:
+		plant_manager.plant_plant(global_position);
+		
 func _physics_process(delta):
 	move_from_path();
 
@@ -43,7 +51,7 @@ func start_path():
 	
 	if (!id_path.is_empty() && id_path.size() <= max_move_range):
 		current_id_path = id_path;
-		turn_count.update_turn_count();
+		turn_count.next_turn();
 
 func move_from_path():
 	if current_id_path.is_empty():
@@ -62,3 +70,4 @@ func move_from_path():
 			target_position = tile_map.map_to_local(current_id_path.front());
 		else:
 			is_moving = false;
+	

@@ -6,12 +6,11 @@ extends Node2D
 var mapFromMouse = Vector2i(0,0);
 
 var is_visible = true;
-var start_path_command;
+var move_player_command = Callable(movePlayer);
 var selecting_command = Callable(selecting);
 var current_command = Callable(do_nothing);
 
 func _ready():
-	start_path_command = Callable(player.start_path);
 	current_command = selecting_command;
 
 func _input(event):
@@ -34,8 +33,7 @@ func do_nothing():
 func selecting():
 	var map_from_mouse = tile_map.local_to_map(get_global_mouse_position());
 	if (map_from_mouse == tile_map.local_to_map(player.global_position)):
-		current_command = start_path_command;
-		
+		current_command = move_player_command;
 		
 func movePlayer():
 	player.start_path();

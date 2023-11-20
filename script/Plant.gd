@@ -19,7 +19,7 @@ func update_age():
 	age += 1;
 	if (age >= JUVENILE):
 		set_phase(1);
-	elif(age >= ADULT):
+	if(age >= ADULT):
 		set_phase(2);
-	elif(age >= DEAD):
+	if(age >= DEAD):
 		queue_free();
