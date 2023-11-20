@@ -2,13 +2,13 @@ extends Node2D
 var aStarGrid: AStarGrid2D
 var current_id_path: Array[Vector2i];
 
-@onready var tile_map = $"../../TileMap"
-@onready var terrainMap = preload("res://scene/TerrainMap.gd");
+@onready var tile_map = $"../../TileMap";
+@onready var turn_count = $"../../Labels/TurnCount";
 
 var target_position: Vector2
 var is_moving: bool
 
-var mapFromMouse = Vector2i(0,0);
+@export var max_move_range = 7;
 
 const GRID_SPACE = Rect2i(0, 0, 16, 16)
 
@@ -27,22 +27,26 @@ func _physics_process(delta):
 	move_from_path();
 
 func start_path():	
+	if (is_moving):
+		return;
+		
 	var id_path
-	var mapFromMouse = tile_map.local_to_map(get_global_mouse_position());
+	var map_from_mouse = tile_map.local_to_map(get_global_mouse_position());
 	
 	if (is_moving):
 		id_path = aStarGrid.get_id_path(
 		tile_map.local_to_map(target_position),
-		mapFromMouse
+		map_from_mouse
 		)
 	else:
 		id_path = aStarGrid.get_id_path(
 		tile_map.local_to_map(global_position),
-		mapFromMouse
+		map_from_mouse
 		).slice(1);
 	
-	if (!id_path.is_empty()):
+	if (!id_path.is_empty() && id_path.size() <= max_move_range):
 		current_id_path = id_path;
+		turn_count.update_turn_count();
 
 func move_from_path():
 	if current_id_path.is_empty():

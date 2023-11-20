@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://yhos3lqe50hu"]
+[gd_scene load_steps=15 format=3 uid="uid://yhos3lqe50hu"]
 
 [ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_rx26m"]
 [ext_resource type="Script" path="res://scene/Player.gd" id="1_ujeuo"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scene/TerrainMap.gd" id="4_hu8ur"]
 [ext_resource type="Script" path="res://scene/Cursor.gd" id="5_0p3u2"]
 [ext_resource type="Texture2D" uid="uid://dflsj3xadflpn" path="res://sprite/jessie.png" id="5_6da1x"]
+[ext_resource type="Script" path="res://scene/TurnCount.gd" id="8_61hvf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aifgd"]
 texture = ExtResource("1_rx26m")
@@ -46,7 +47,6 @@ atlas = ExtResource("5_6da1x")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="LabelSettings" id="LabelSettings_3gkfw"]
-font_size = 26
 
 [node name="Main" type="Node2D"]
 
@@ -80,12 +80,27 @@ script = ExtResource("1_ujeuo")
 [node name="Sprite2D" type="Sprite2D" parent="TileMap/Player"]
 texture = SubResource("AtlasTexture_71hdk")
 
-[node name="Label" type="Label" parent="."]
+[node name="Labels" type="Node2D" parent="."]
+
+[node name="TurnCount" type="Label" parent="Labels"]
 z_index = 30
 texture_filter = 1
-offset_left = 9.0
-offset_top = 6.0
-offset_right = 100.0
-offset_bottom = 45.0
+offset_left = 8.0
+offset_top = 5.0
+offset_right = 99.0
+offset_bottom = 44.0
 text = "Turn #:"
 label_settings = SubResource("LabelSettings_3gkfw")
+script = ExtResource("8_61hvf")
+
+[node name="ScoreCount" type="Label" parent="Labels"]
+visible = false
+z_index = 30
+texture_filter = 1
+offset_left = 132.0
+offset_top = 5.0
+offset_right = 223.0
+offset_bottom = 44.0
+text = "Score:"
+label_settings = SubResource("LabelSettings_3gkfw")
+script = ExtResource("8_61hvf")
