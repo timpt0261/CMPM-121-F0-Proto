@@ -19,9 +19,6 @@ func _ready():
 	aStarGrid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER;
 	aStarGrid.update();
 
-func _input(event):
-	if event.is_action_pressed("Move") == true:
-		start_path();
 
 func _physics_process(delta):
 	move_from_path();

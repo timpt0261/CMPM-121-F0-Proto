@@ -26,6 +26,7 @@ func _init():
 	set_sunlight(sunlight_amt);
 
 func set_wetness(water):
+	water_amt = water;
 	if (water_amt < belowIsWet):
 		tile_type = grass_type.WET_GRASS;
 	elif (water_amt >= belowIsWet && water_amt <= aboveIsDry):

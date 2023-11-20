@@ -1,6 +1,6 @@
 extends TileMap
 
-@onready var grass = preload("res://scene/Grass.gd");
+@onready var grass = preload("res://script/Grass.gd");
 
 const MASTER_GRID_SIZE = 256;
 var terrainDict = {};
