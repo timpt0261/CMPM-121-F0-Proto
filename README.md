@@ -12,7 +12,7 @@ Researches alternative engines, gains buy-in from teammates on the choice, and t
 Sets the creative direction of the project, establishes the look and feel of the game, and leads discussions on domain-specific language elements. Responsible for creating small art or code samples to help others contribute to and maintain game content.
 
 ## Production -[Daniel Bustan]
-Defines the project scope and deliverable, while coordinating team memeber to work alognside. Responsblities include but not limited to muscic production and creating assets.
+Researches alternative engines and provides direction to team-members on engine-specific syntax. Establishes standards for organizing code into project folders and proposes software designs that insulate the team from underlying engine details.
 
 ## Tools and Materials
 
