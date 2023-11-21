@@ -8,7 +8,7 @@ Responsible for researching alternative tools, setting up configurations, and es
 ### Engine Lead - [Gabriel Bacon]
 Researches alternative engines, gains buy-in from teammates on the choice, and teaches peers how to use it. Establishes standards for organizing code into project folders and proposes software designs that insulate the team from underlying engine details.
 
-### Design Lead - [Ben Dailey]
+### Design Lead - [Ben Daly]
 Sets the creative direction of the project, establishes the look and feel of the game, and leads discussions on domain-specific language elements. Responsible for creating small art or code samples to help others contribute to and maintain game content.
 
 ## Production -[Daniel Bustan]
