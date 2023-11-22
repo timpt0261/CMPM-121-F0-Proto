@@ -1,9 +1,4 @@
 res://scene/main.tscn
-res://script/grass.gd
-res://script/terrain_map.gd
-res://script/turn_count.gd
-res://script/Plant.gd
-res://scene/Labels.gd
-res://script/label_manager.gd
-res://script/plant_manager.gd
 res://scene/plant.tscn
+res://script/plant_manager.gd
+res://script/Plant.gd

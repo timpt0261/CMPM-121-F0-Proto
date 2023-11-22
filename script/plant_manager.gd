@@ -16,7 +16,12 @@ func get_plant_at_pos(pos):
 	return p;
 	
 func update_plants():
+	print(plantDict.size());
 	for key in plantDict:
-		print(plantDict.get(key).age);
-		plantDict.get(key).update_age();
+		var current_plant = plantDict.get(key);
+		if current_plant.age >= 16:
+			current_plant.queue_free();
+			plantDict.erase(key);
+		else:
+			current_plant.update_age();
 		
