@@ -31,6 +31,4 @@ func next_turn():
 	for key in terrainDict:
 		
 		grass_instance = terrainDict[key];
-		print("before: ", grass_instance.tile_type);
 		grass_instance.randomize_tile_properties();
-		print("after: ", grass_instance.tile_type);
