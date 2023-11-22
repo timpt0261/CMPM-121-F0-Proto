@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://fp62xg7u1jen"]
+
+[ext_resource type="Texture2D" uid="uid://cm1mc0cm00rre" path="res://sprite/sword_cursor.png" id="1_k4ppy"]
+[ext_resource type="Script" path="res://script/menu_cursor.gd" id="1_vbhei"]
+
+[node name="menu_cursor" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_k4ppy")
+stretch_mode = 4
+script = ExtResource("1_vbhei")
