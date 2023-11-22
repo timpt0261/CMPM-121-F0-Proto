@@ -11,7 +11,7 @@ Researches alternative engines and provides direction to team-members on engine-
 ### Design Lead - [Ben Daly]
 Establishes the creative direction of the project, sets the look and feel of the game, and leads discussions on domain-specific language elements. Responsible for creating small art or code samples to help others contribute.
 
-## Production Lead -[Daniel Bustan]
+### Production Lead -[Daniel Bustan]
 Defines the project scope and deliverable. Responsibilities include but not limited to group scheduling, music production and asset creation. 
 
 ## Tools and Materials
