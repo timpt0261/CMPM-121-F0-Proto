@@ -26,9 +26,8 @@ func set_grass(x,y):
 	terrainDict[str(Vector2(x,y))] = g;
 	
 
-func next_turn():
+func update_grass():
 	var grass_instance: Grass;
 	for key in terrainDict:
-		
 		grass_instance = terrainDict[key];
 		grass_instance.randomize_tile_properties();

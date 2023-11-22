@@ -47,3 +47,4 @@ func set_sunlight(sun):
 	if (sunlight_amt > aboveIsSunny):
 		sunny = true;
 
+
