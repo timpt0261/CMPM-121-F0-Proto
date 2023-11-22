@@ -24,9 +24,9 @@ func _ready():
 
 
 # Remove this as soon as I connect this to menus
-func _input(event):
-	if event.is_action_pressed("Plant") == true:
-		plant_manager.plant_plant(global_position);
+#func _input(event):
+#	if event.is_action_pressed("Plant") == true:
+#		plant_manager.plant_plant(global_position);
 		
 func _physics_process(_delta):
 	move_from_path();
@@ -70,4 +70,11 @@ func move_from_path():
 			target_position = tile_map.map_to_local(current_id_path.front());
 		else:
 			is_moving = false;
-	
+			
+func plant_plant(planting_pos: Vector2, type):
+	var player_map_pos = tile_map.local_to_map(global_position);
+	var planting_map_pos = tile_map.local_to_map(planting_pos);
+	var distance_squrd = pow(planting_map_pos.x - player_map_pos.x, 2) + pow(planting_map_pos.y - player_map_pos.y, 2);
+	if !is_moving && distance_squrd == 1:
+		plant_manager.plant_plant(planting_pos);
+		turn_count.next_turn();

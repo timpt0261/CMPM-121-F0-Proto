@@ -1,4 +1,6 @@
-class_name Grass extends Node
+extends Node
+
+class_name Grass
 
 const aboveIsSunny = 49;
 const belowIsWet = 33;

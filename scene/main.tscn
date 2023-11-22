@@ -109,5 +109,5 @@ offset_bottom = 33.0
 text = "Score:"
 label_settings = SubResource("LabelSettings_3gkfw")
 
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="TileMap" method="next_turn"]
 [connection signal="next_turn_signal" from="Labels/TurnCount" to="TileMap" method="_on_turn_count_next_turn_signal"]
+[connection signal="next_turn_signal" from="Labels/TurnCount" to="TileMap" method="next_turn"]
