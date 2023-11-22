@@ -30,6 +30,8 @@ func randomize_tile_properties():
 	
 func set_wetness(water):
 	water_amt = water;
+	
+	@warning_ignore("integer_division")
 	var sun_affecting_water = sunlight_amt/5;
 	water_amt -= sun_affecting_water;
 	

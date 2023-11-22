@@ -1,6 +1,6 @@
 extends TileMap
 
-@onready var grass = preload("res://script/Grass.gd");
+@onready var grass = preload("res://script/grass.gd");
 @onready var plant_manager = $"Plants"
 
 const MASTER_GRID_SIZE = 256;

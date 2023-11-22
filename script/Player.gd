@@ -28,7 +28,7 @@ func _input(event):
 	if event.is_action_pressed("Plant") == true:
 		plant_manager.plant_plant(global_position);
 		
-func _physics_process(delta):
+func _physics_process(_delta):
 	move_from_path();
 
 func start_path():	

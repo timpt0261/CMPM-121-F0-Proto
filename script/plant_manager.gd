@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var plant = preload("res://scene/Plant.tscn");
+@onready var plant = preload("res://scene/plant.tscn");
 
 var plantDict = Dictionary();
 
