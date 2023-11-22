@@ -24,3 +24,11 @@ func set_grass(x,y):
 	if (g.sunny):
 		set_cell(layersIDs.HIGHLIGHT, Vector2(x,y), layersIDs.HIGHLIGHT, Vector2i(0,0));
 	terrainDict[str(Vector2(x,y))] = g;
+	
+
+func next_turn():
+	var grass_instance: Grass;
+	for key in terrainDict:
+		
+		grass_instance = terrainDict[key];
+		grass_instance.randomize_tile_properties();

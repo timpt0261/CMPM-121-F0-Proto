@@ -18,15 +18,21 @@ enum grass_type {
 };
 
 func _init():
+	randomize_tile_properties();
+
+
+func randomize_tile_properties():
 	var rnd = RandomNumberGenerator.new();
 	water_amt = rnd.randi_range(0,100);
 	sunlight_amt = rnd.randi_range(0,100);
-	
-	set_wetness(water_amt);
 	set_sunlight(sunlight_amt);
-
+	set_wetness(water_amt);
+	
 func set_wetness(water):
 	water_amt = water;
+	var sun_affecting_water = sunlight_amt/5;
+	water_amt -= sun_affecting_water;
+	
 	if (water_amt < belowIsWet):
 		tile_type = grass_type.WET_GRASS;
 	elif (water_amt >= belowIsWet && water_amt <= aboveIsDry):
