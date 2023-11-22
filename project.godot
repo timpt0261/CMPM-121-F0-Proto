@@ -24,6 +24,19 @@ window/size/window_width_override=768
 window/size/window_height_override=768
 window/stretch/mode="canvas_items"
 
+[dotnet]
+
+project/assembly_name="CMPM-121-Final"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/github_to_itch/plugin.cfg")
+
+[github_to_itch]
+
+config/itch_username=""
+config/itch_project_name=""
+
 [input]
 
 Select={

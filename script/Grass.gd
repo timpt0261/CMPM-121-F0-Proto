@@ -43,10 +43,14 @@ func set_wetness(water):
 		tile_type = grass_type.NORMAL_GRASS;
 	elif (water_amt > aboveIsDry):	
 		tile_type = grass_type.DRY_GRASS;
+
+func get_wetness():
+	return tile_type;
 	
 func set_sunlight(sun):
 	sunlight_amt = sun;
 	if (sunlight_amt > aboveIsSunny):
 		sunny = true;
 
-
+func get_sunlight():
+	return sunny;
