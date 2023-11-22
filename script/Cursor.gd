@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var tile_map = $"../../TileMap"
 @onready var player = $"../Player"
-@onready var terrainMap = preload("res://script/TerrainMap.gd");
+@onready var terrainMap = preload("res://script/terrain_map.gd");
 var mapFromMouse = Vector2i(0,0);
 
 var is_visible = true;
