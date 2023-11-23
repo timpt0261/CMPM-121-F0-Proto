@@ -21,4 +21,5 @@ func update_plants():
 			current_plant.queue_free();
 			plantDict.erase(key);
 
-		
+func harvest_plants():
+	return;
