@@ -2,7 +2,7 @@ extends Node2D
 var aStarGrid: AStarGrid2D
 var current_id_path: Array[Vector2i];
 
-@onready var tile_map = $"../../TileMap";
+@onready var terrain_map = $"../../TerrainMap";
 @onready var turn_count = $"../../Labels/TurnCount";
 @onready var plant_manager = $"../Plants";
 
@@ -36,29 +36,28 @@ func start_path():
 		return;
 		
 	var id_path
-	var map_from_mouse = tile_map.local_to_map(get_global_mouse_position());
+	var map_from_mouse = terrain_map.local_to_map(get_global_mouse_position());
 	
 	if (is_moving):
 		id_path = aStarGrid.get_id_path(
-		tile_map.local_to_map(target_position),
+		terrain_map.local_to_map(target_position),
 		map_from_mouse
 		)
 	else:
 		id_path = aStarGrid.get_id_path(
-		tile_map.local_to_map(global_position),
+		terrain_map.local_to_map(global_position),
 		map_from_mouse
 		).slice(1);
 	
 	if (!id_path.is_empty() && id_path.size() <= max_move_range):
 		current_id_path = id_path;
-		turn_count.next_turn();
 
 func move_from_path():
 	if current_id_path.is_empty():
 		return
 
 	if (!is_moving):
-		target_position = tile_map.map_to_local(current_id_path.front());
+		target_position = terrain_map.map_to_local(current_id_path.front());
 		is_moving = true;
 
 	global_position = global_position.move_toward(target_position, 1);
@@ -67,7 +66,8 @@ func move_from_path():
 		current_id_path.pop_front();
 		
 		if (!current_id_path.is_empty()):
-			target_position = tile_map.map_to_local(current_id_path.front());
+			target_position = terrain_map.map_to_local(current_id_path.front());
 		else:
 			is_moving = false;
+			turn_count.next_turn();
 	

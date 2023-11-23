@@ -51,7 +51,7 @@ region = Rect2(0, 0, 16, 16)
 
 [node name="Main" type="Node2D"]
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="TerrainMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_mkbp6")
 format = 2
 layer_0/name = "Grass"
@@ -71,17 +71,17 @@ layer_2/z_index = 50
 layer_2/tile_data = PackedInt32Array(0, 2, 0)
 script = ExtResource("4_hu8ur")
 
-[node name="Cursor" type="Node2D" parent="TileMap"]
+[node name="Cursor" type="Node2D" parent="TerrainMap"]
 script = ExtResource("5_0p3u2")
 
-[node name="Player" type="Node2D" parent="TileMap"]
+[node name="Player" type="Node2D" parent="TerrainMap"]
 position = Vector2(120, 120)
 script = ExtResource("1_ujeuo")
 
-[node name="Sprite2D" type="Sprite2D" parent="TileMap/Player"]
+[node name="Sprite2D" type="Sprite2D" parent="TerrainMap/Player"]
 texture = SubResource("AtlasTexture_71hdk")
 
-[node name="Plants" type="Node2D" parent="TileMap"]
+[node name="Plants" type="Node2D" parent="TerrainMap"]
 script = ExtResource("8_4beqp")
 
 [node name="Labels" type="Node2D" parent="."]

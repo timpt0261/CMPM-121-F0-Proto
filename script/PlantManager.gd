@@ -16,5 +16,6 @@ func get_plant_at_pos(pos):
 	
 func update_plants():
 	for key in plantDict:
-		plantDict.get(key).update_age();
-		
+		plant = plantDict.get(key);
+		if (plant):
+			plant.update_age();

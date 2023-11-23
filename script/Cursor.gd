@@ -1,8 +1,7 @@
 extends Node2D
 
-@onready var tile_map = $"../../TileMap"
+@onready var terrain_map = $"../../TerrainMap"
 @onready var player = $"../Player"
-@onready var terrainMap = preload("res://script/TerrainMap.gd");
 var mapFromMouse = Vector2i(0,0);
 
 var is_visible = true;
@@ -21,18 +20,18 @@ func _input(event):
 
 func set_new_cursor_location():
 	if (!is_visible): return;
-	var newPos = tile_map.local_to_map(get_global_mouse_position());
+	var newPos = terrain_map.local_to_map(get_global_mouse_position());
 	if (mapFromMouse != newPos):
-		tile_map.erase_cell(terrainMap.layersIDs.CURSOR, mapFromMouse);
+		terrain_map.erase_cell(terrain_map.layers_IDs.CURSOR, mapFromMouse);
 		mapFromMouse = newPos;
-	tile_map.set_cell(2, mapFromMouse, 2, Vector2i(0,0));
+	terrain_map.set_cell(2, mapFromMouse, 2, Vector2i(0,0));
 
 func do_nothing():
 	pass
 
 func selecting():
-	var map_from_mouse = tile_map.local_to_map(get_global_mouse_position());
-	if (map_from_mouse == tile_map.local_to_map(player.global_position)):
+	var map_from_mouse = terrain_map.local_to_map(get_global_mouse_position());
+	if (map_from_mouse == terrain_map.local_to_map(player.global_position)):
 		current_command = move_player_command;
 		
 func movePlayer():

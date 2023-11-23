@@ -23,3 +23,4 @@ func update_age():
 		set_phase(2);
 	if(age >= DEAD):
 		queue_free();
+		
