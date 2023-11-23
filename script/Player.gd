@@ -36,12 +36,12 @@ func start_path():
 	var map_from_mouse = terrain_map.local_to_map(get_global_mouse_position());
 	
 	if (is_moving):
-		id_path = aStarGrid.get_id_path(
+		id_path = a_star_grid.get_id_path(
 		terrain_map.local_to_map(target_position),
 		map_from_mouse
 		)
 	else:
-		id_path = aStarGrid.get_id_path(
+		id_path = a_star_grid.get_id_path(
 		terrain_map.local_to_map(global_position),
 		map_from_mouse
 		).slice(1);

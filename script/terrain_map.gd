@@ -20,6 +20,7 @@ func _ready():
 
 func set_grass(g, x,y):
 	erase_cell(layers_IDs.HIGHLIGHT, Vector2(x,y));
+	
 	set_cell(layers_IDs.GRASS, Vector2(x,y), layers_IDs.GRASS, Vector2i(g.tile_type,0));	
 
 	if (g.sunny):

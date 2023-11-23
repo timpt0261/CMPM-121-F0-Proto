@@ -2,9 +2,9 @@ extends Node
 
 class_name Grass
 
-const aboveIsSunny = 49;
-const belowIsWet = 33;
-const aboveIsDry = 66;
+const ABOVE_IS_SUNNY = 49;
+const BELOW_IS_WET = 33;
+const ABOVE_IS_DRY = 66;
 
 var sunlight_amt: int = 0;
 var water_amt: int = 0;
@@ -20,28 +20,31 @@ enum grass_type {
 };
 
 func _init():
+	var rnd = RandomNumberGenerator.new();
+	water_amt = rnd.randi_range(0, 100);
 	randomize_tile_properties();
 
 
 func randomize_tile_properties():
 	var rnd = RandomNumberGenerator.new();
-	water_amt = rnd.randi_range(0,100);
+	water_amt += rnd.randi_range(-15, 15);
+	water_amt = clampi(water_amt, 0, 100);
 	sunlight_amt = rnd.randi_range(0,100);
 	set_sunlight(sunlight_amt);
-	set_wetness(water_amt);
+	set_wetness();
 	
-func set_wetness(water):
-	water_amt = water;
+func set_wetness():
 	
 	@warning_ignore("integer_division")
-	var sun_affecting_water = sunlight_amt/5;
+	var sun_affecting_water = sunlight_amt/20;
 	water_amt -= sun_affecting_water;
+	water_amt = clampi(water_amt, 0, 100);
 	
-	if (water_amt < belowIsWet):
+	if (water_amt < BELOW_IS_WET):
 		tile_type = grass_type.WET_GRASS;
-	elif (water_amt >= belowIsWet && water_amt <= aboveIsDry):
+	elif (water_amt >= BELOW_IS_WET && water_amt <= ABOVE_IS_DRY):
 		tile_type = grass_type.NORMAL_GRASS;
-	elif (water_amt > aboveIsDry):	
+	elif (water_amt > ABOVE_IS_DRY):	
 		tile_type = grass_type.DRY_GRASS;
 
 func get_wetness():
@@ -49,8 +52,10 @@ func get_wetness():
 	
 func set_sunlight(sun):
 	sunlight_amt = sun;
-	if (sunlight_amt > aboveIsSunny):
+	if (sunlight_amt > ABOVE_IS_SUNNY):
 		sunny = true;
+	else:
+		sunny = false;
 
 func get_sunlight():
 	return sunny;
