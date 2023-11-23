@@ -1,5 +1,5 @@
 extends Node2D
-var aStarGrid: AStarGrid2D
+var a_star_grid: AStarGrid2D
 var current_id_path: Array[Vector2i];
 
 @onready var terrain_map = $"../../TerrainMap";
@@ -12,21 +12,18 @@ var is_moving: bool
 
 @export var max_move_range = 7;
 
-const GRID_SPACE = Rect2i(0, 0, 16, 16)
+const GRID_SIZE = 16;
+const GRID_SPACE = Rect2i(0, 0, GRID_SIZE, GRID_SIZE)
 
 func _ready():
-	aStarGrid = AStarGrid2D.new()
-	aStarGrid.region = Rect2i(0, 0, 16, 16)
-	aStarGrid.cell_size = Vector2(16,16);
-	aStarGrid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER;
-	aStarGrid.update();
+	a_star_grid = AStarGrid2D.new()
+	a_star_grid.region = GRID_SPACE
+	a_star_grid.cell_size = Vector2(GRID_SIZE,GRID_SIZE);
+	a_star_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER;
+	a_star_grid.update();
 
 
 
-# Remove this as soon as I connect this to menus
-#func _input(event):
-#	if event.is_action_pressed("Plant") == true:
-#		plant_manager.plant_plant(global_position);
 		
 func _physics_process(_delta):
 	move_from_path();
@@ -69,10 +66,11 @@ func move_from_path():
 			target_position = terrain_map.map_to_local(current_id_path.front());
 		else:
 			is_moving = false;
+			turn_count.next_turn();
 			
-func plant_plant(planting_pos: Vector2, type):
-	var player_map_pos = tile_map.local_to_map(global_position);
-	var planting_map_pos = tile_map.local_to_map(planting_pos);
+func plant_plant(planting_pos: Vector2):
+	var player_map_pos = terrain_map.local_to_map(global_position);
+	var planting_map_pos = terrain_map.local_to_map(planting_pos);
 	var distance_squrd = pow(planting_map_pos.x - player_map_pos.x, 2) + pow(planting_map_pos.y - player_map_pos.y, 2);
 	if !is_moving && distance_squrd == 1:
 		plant_manager.plant_plant(planting_pos);

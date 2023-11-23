@@ -7,11 +7,9 @@ var turn_number = 0;
 @onready var terrain_map = $"../../TerrainMap/";
 
 func next_turn():
-	turn_number += 1;
+	turn_number += 1; 
 	text = "Turn #: " +  str(turn_number);
-	
-	
-	terrainMap.update_grass();
+	terrain_map.update_grass();
 	plant_manager.update_plants();
 	
 	

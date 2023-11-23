@@ -1,32 +1,67 @@
 extends Node2D
 
+
+@onready var terrain_map = $"../../../TerrainMap";
 var age = 0;
-var sprite = null;
 
 const JUVENILE = 3;
-const ADULT = 7;
+const ADULT = 6;
 const DEAD = 10;
 
 const REGION_SIZE = 16;
 
+var plant_recipe
+var sprite;
+var points;
+
+var plant_list = [
+	{
+		"Name": "Daisy",
+		"sprite": "res://sprite/daisy.png",
+		"points": 3,
+	},
+	{
+		"Name": "Zucchini",
+		"sprite": "res://sprite/zucchini.png",
+		"points": 5,
+	},
+	{
+		"Name": "Strawberry",
+		"sprite": "res://sprite/strawberry.png",
+		"points": 7,
+	},
+	
+]
+
 func _ready():
 	sprite = $"Sprite";
-	#sprite.region_enabled = true;
-
-func set_sprite(texture):
-	sprite.texture.atlas = load(texture);
+	var rnd = RandomNumberGenerator.new();
+	plant_recipe = plant_list[rnd.randi_range(0, plant_list.size() - 1)];
+	points = plant_recipe.get(points);
+	set_phase(0);
 
 func set_phase(phase):
-	sprite.texture.region = Rect2(REGION_SIZE * phase, 0, REGION_SIZE, REGION_SIZE);
-	#sprite.region_rect = Rect2(REGION_SIZE * phase, 0, REGION_SIZE, REGION_SIZE);
-	#print(phase);
-	print(sprite.region_rect);
+	var atlas_tex = AtlasTexture.new();
+	atlas_tex.atlas = load(plant_recipe.get("sprite"));
+	atlas_tex.region = Rect2(phase * REGION_SIZE, 0, REGION_SIZE, REGION_SIZE);
+	sprite.texture = atlas_tex;
 
 func update_age():
-	age += 1;
-	if (age >= JUVENILE && age <= ADULT):
+	var terrain_pos = terrain_map.local_to_map(global_position);
+
+	var grass_underneath = terrain_map.get_grass(terrain_pos.x, terrain_pos.y);
+	
+	var water_ratio = (float)(grass_underneath.water_amt) / 100;
+	var sun_ratio = (float)(grass_underneath.sunlight_amt) / 100;
+
+	
+	age += (sun_ratio)  + (water_ratio);
+	if (age >= JUVENILE && age < ADULT):
 		set_phase(1);
-	if(age >= ADULT):
+	elif(age >= ADULT && age < DEAD):
 		set_phase(2);
-	#if(age >= DEAD):
-	#	queue_free();
+	elif (age >= DEAD):
+		return false;
+			
+	return true;
+

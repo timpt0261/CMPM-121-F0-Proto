@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://script/terrain_map.gd" id="3_bdwhm"]
 [ext_resource type="Texture2D" uid="uid://h3pwbiwgoyw" path="res://tile/selected.png" id="3_fq6s7"]
 [ext_resource type="Texture2D" uid="uid://dcqniyr0oya1k" path="res://tile/highlight.png" id="3_j1xgt"]
-[ext_resource type="Script" path="res://script/cursor.gd" id="4_5hs7g"]
+[ext_resource type="Script" path="res://script/Cursor.gd" id="5_2d0sc"]
 [ext_resource type="Texture2D" uid="uid://dflsj3xadflpn" path="res://sprite/jessie.png" id="5_6da1x"]
 [ext_resource type="Script" path="res://script/player.gd" id="5_s21wj"]
-[ext_resource type="Script" path="res://script/plant_manager.gd" id="7_d7mrk"]
+[ext_resource type="Script" path="res://script/plant_manager.gd" id="8_14ev8"]
 [ext_resource type="Script" path="res://script/turn_count.gd" id="8_sqolj"]
 [ext_resource type="Script" path="res://script/label_manager.gd" id="9_bgp6k"]
 
@@ -72,7 +72,7 @@ layer_2/tile_data = PackedInt32Array()
 script = ExtResource("3_bdwhm")
 
 [node name="Cursor" type="Node2D" parent="TerrainMap"]
-script = ExtResource("5_0p3u2")
+script = ExtResource("5_2d0sc")
 
 [node name="Player" type="Node2D" parent="TerrainMap"]
 position = Vector2(120, 120)
@@ -83,7 +83,7 @@ position = Vector2(0, -1)
 texture = SubResource("AtlasTexture_71hdk")
 
 [node name="Plants" type="Node2D" parent="TerrainMap"]
-script = ExtResource("8_4beqp")
+script = ExtResource("8_14ev8")
 
 [node name="Labels" type="Node2D" parent="."]
 script = ExtResource("9_bgp6k")
@@ -108,6 +108,3 @@ offset_right = 220.0
 offset_bottom = 33.0
 text = "Score:"
 label_settings = SubResource("LabelSettings_3gkfw")
-
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="TileMap" method="_on_turn_count_next_turn_signal"]
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="TileMap" method="next_turn"]

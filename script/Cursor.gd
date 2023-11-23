@@ -48,5 +48,5 @@ func movePlayer():
 #	current_command = selecting_command;
 	
 func plant_plant():
-	player.plant_plant(tile_map.map_to_local(mapFromMouse), "");
+	player.plant_plant(terrain_map.map_to_local(mapFromMouse));
 	
