@@ -68,10 +68,18 @@ func move_from_path():
 			is_moving = false;
 			turn_count.next_turn();
 			
-func plant_plant(planting_pos: Vector2):
-	var player_map_pos = terrain_map.local_to_map(global_position);
-	var planting_map_pos = terrain_map.local_to_map(planting_pos);
-	var distance_squrd = pow(planting_map_pos.x - player_map_pos.x, 2) + pow(planting_map_pos.y - player_map_pos.y, 2);
-	if !is_moving && distance_squrd == 1:
-		plant_manager.plant_plant(planting_pos);
+func try_plant_plant(planting_pos: Vector2):
+	var player_map_pos: Vector2i = terrain_map.local_to_map(global_position);
+	var planting_map_pos: Vector2i = terrain_map.local_to_map(planting_pos);
+	var distance_squared: = pow(planting_map_pos.x - player_map_pos.x, 2) + pow(planting_map_pos.y - player_map_pos.y, 2);
+	if !is_moving && distance_squared == 1 && !plant_manager.is_plant_at_pos(planting_map_pos):
+		plant_manager.plant_plant(planting_map_pos);
+		turn_count.next_turn();
+
+func try_harvest_plant(harvest_pos: Vector2):
+	var player_map_pos: Vector2i = terrain_map.local_to_map(global_position);
+	var harvest_map_pos: Vector2i = terrain_map.local_to_map(harvest_pos);
+	var distance_squared = pow(harvest_map_pos.x - player_map_pos.x, 2) + pow(harvest_map_pos.y - player_map_pos.y, 2);
+	if !is_moving && distance_squared == 1 && plant_manager.is_plant_at_pos(harvest_map_pos):
+		plant_manager.harvest_plant(harvest_map_pos);
 		turn_count.next_turn();

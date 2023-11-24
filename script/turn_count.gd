@@ -12,4 +12,3 @@ func next_turn():
 	terrain_map.update_grass();
 	plant_manager.update_plants();
 	
-	

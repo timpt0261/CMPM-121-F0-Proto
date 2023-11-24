@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cdvrt3alfjcqp"]
+[gd_scene load_steps=18 format=3 uid="uid://cdvrt3alfjcqp"]
 
 [ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_rx26m"]
 [ext_resource type="Script" path="res://script/terrain_map.gd" id="3_bdwhm"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://script/plant_manager.gd" id="8_14ev8"]
 [ext_resource type="Script" path="res://script/turn_count.gd" id="8_sqolj"]
 [ext_resource type="Script" path="res://script/label_manager.gd" id="9_bgp6k"]
+[ext_resource type="Script" path="res://script/score_count.gd" id="11_pb80n"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aifgd"]
 texture = ExtResource("1_rx26m")
@@ -108,3 +109,4 @@ offset_right = 220.0
 offset_bottom = 33.0
 text = "Score:"
 label_settings = SubResource("LabelSettings_3gkfw")
+script = ExtResource("11_pb80n")

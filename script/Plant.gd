@@ -1,6 +1,5 @@
 extends Node2D
 
-
 @onready var terrain_map = $"../../../TerrainMap";
 var age = 0;
 
@@ -30,7 +29,6 @@ var plant_list = [
 		"sprite": "res://sprite/strawberry.png",
 		"points": 7,
 	},
-	
 ]
 
 func _ready():
@@ -50,7 +48,7 @@ func update_age():
 	var terrain_pos = terrain_map.local_to_map(global_position);
 
 	var grass_underneath = terrain_map.get_grass(terrain_pos.x, terrain_pos.y);
-	
+
 	var water_ratio = (float)(grass_underneath.water_amt) / 100;
 	var sun_ratio = (float)(grass_underneath.sunlight_amt) / 100;
 
