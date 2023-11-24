@@ -1,13 +1,17 @@
 extends Node2D
 
 @onready var terrain_map = $"../../../TerrainMap";
-var age = 0;
+var growth = 0;
+var turns_alive = 0;
 
 const JUVENILE = 3;
 const ADULT = 6;
+
 const DEAD = 10;
 
 const REGION_SIZE = 16;
+
+var adjacent_plant_bonus: int = 0;
 
 var plant_recipe
 var sprite;
@@ -53,13 +57,13 @@ func update_age():
 	var sun_ratio = (float)(grass_underneath.sunlight_amt) / 100;
 
 	
-	age += (sun_ratio)  + (water_ratio);
-	if (age >= JUVENILE && age < ADULT):
+	growth += (sun_ratio) + (water_ratio) * adjacent_plant_bonus;
+	if (growth >= JUVENILE && growth < ADULT):
 		set_phase(1);
-	elif(age >= ADULT && age < DEAD):
+	elif(growth >= ADULT && growth < DEAD):
 		set_phase(2);
-	elif (age >= DEAD):
+		
+	if (turns_alive >= DEAD):
 		return false;
-			
+		
 	return true;
-

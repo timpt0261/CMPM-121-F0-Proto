@@ -1,4 +1,34 @@
-# cpmp-121-final
+# CMPM-121-Final
+
+## F0 Devlog (11.24.23)
+
+Well, Thanksgiving was yesterday -- since a lot of people in the group seem to be going pretty far/flying for the holidays, I figured I'd try to do this log myself since I'm not travelling as much. Video forthcoming.
+
+### Requirements Fulfillment Breakdown for F0
+
+### [F0.a] You control a character moving on a 2D grid.
+The character is moved via the mouse. Right now, we use the keyboard for actions (Z: Move, X: Plant, C: Harvest), but we keep the mouse being the one to select where you decide to move/plant/harvest an object.
+### [F0.b] You advance time in the turn-based simulation manually.
+We keep discrete track of "turns" in the upper-left. A turn passes each time the player moves, plants, or harvests a plant.
+### [F0.c] You can reap (gather) or sow (plant) plants on the grid when your character is near them.
+If the player has moved directly adjacent to a plant, they can press X, select the spot, and harvest it. Plants must be at their final growth space for this to reward points.
+If the player is adjacent to an open spot on the grid, they can plant a random plant of three different kinds. Daisies give the least points, strawberries the most, with zucchini in the middle. Points do not have a purpose yet; only the harvesting itself.
+
+### [F0.d] Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
+At the beginning of the game, all grass tiles are initialized with a certain water level between (and staying between) 0 and 100. 
+A new level of sun (also between 1 and 100) is generated each turn, with a fraction of its value subtracting from the water level.
+Finally, each turn, the water level in a tile increases and decreases naturally on its own.
+
+### [F0.e] Each plant on the grid has a type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+There are zucchinis, strawberries, and daisies. Each has three stages, where the third stage is when they can be harvested for points. Before that, they do not count for harvests, and after that, they die. Their phases are tracked by an internal age that updates based on sun and water levels every turn.
+
+Plant growth stages are tracked differently from how many turns they have been alive. After they have been alive for a certain number of turns, they die, regardless of their growth stage.
+### [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
+Plants grow based on a combination of their current sun and water values. They also grow at a faster rate if there are other plants directly (not diagonally).
+If a tile is sunny (flashing lightly) and wet (dark), those are the ideal environments for a plant.
+
+### [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+The scenario is completed once the player has harvested 5 plants. Again, the points plants yield currently have no purpose, just their acquisition.
 
 ## Introducing the Team
 

@@ -6,7 +6,6 @@ var current_id_path: Array[Vector2i];
 @onready var turn_count = $"../../Labels/TurnCount";
 @onready var plant_manager = $"../Plants";
 
-
 var target_position: Vector2
 var is_moving: bool
 
