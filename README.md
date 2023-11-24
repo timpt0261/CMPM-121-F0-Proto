@@ -1,10 +1,10 @@
 # CMPM-121-Final
 
-## F0 Devlog (11.24.23)
+## F0 Devlog (11.24.23) [Ben Daly]
 
 Well, Thanksgiving was yesterday -- since a lot of people in the group seem to be going pretty far/flying for the holidays, I figured I'd try to do this log myself since I'm not travelling as much. Video forthcoming.
 
-### Requirements Fulfillment Breakdown for F0
+### How we satisfied the software requirements
 
 ### [F0.a] You control a character moving on a 2D grid.
 The character is moved via the mouse. Right now, we use the keyboard for actions (Z: Move, X: Plant, C: Harvest), but we keep the mouse being the one to select where you decide to move/plant/harvest an object.
@@ -29,6 +29,19 @@ If a tile is sunny (flashing lightly) and wet (dark), those are the ideal enviro
 
 ### [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
 The scenario is completed once the player has harvested 5 plants. Again, the points plants yield currently have no purpose, just their acquisition.
+
+### Reflection
+I (Ben) really wanted a Fire-Emblem-Like combat system, and maybe we can manage that in the future -- the idea was that zombies/monsters would come from the margins of the screen to attack plants, and you'd have to fight them off while trying to figure out if you could harvest plants in time that would give you buffs.
+Godot is pretty weird, and the holiday hit, and so we only got to the bare minimum of requirements. It bummed me out, but what can you do? We scoped smaller.
+
+We had a lot of arguments about using GDScript versus C#, and so far it seems like we made the right decision, but we also have a lot of sloppy getting of data across classes, and we're also using nodes, which the professor recommended against. Since Gabe is the engine lead, he's offered to do this before we start F1, but I don't know if it's feasible.
+
+I've been Design Lead, but I feel like I've been de facto project lead. I don't think Tools has a lot to do right now since Godot's pipeline is kind of already built for you, too, but Reuben did help get the .gitignore properly working.
+
+Here's to hoping we can clean up a bit for F1.
+
+# Devlog Entry - [11/19/2023]
+Reuben Chavez: I have create the repo for our final project and have intergrated godot.
 
 ## Introducing the Team
 
@@ -65,7 +78,4 @@ The hardest part of this project might be integrating any engine changes Adam ma
 
 ### Learning Objectives
 By using the selected tools and materials, we hope to learn how to better use the Godot Engine, while . This includes [Specific Skills or Knowledge] that will benefit our team members individually and collectively.
-
-# Devlog Entry - [11/19/2023]
-Reuben Chavez: I have create the repo for our final project and have intergrated godot.
 
