@@ -19,6 +19,4 @@ func game_over():
 	# Show the game over screen or perform any other game over actions
 	var game_over_screen = preload("res://scene/game_over.tscn").instantiate() # Adjust the path
 	get_tree().current_scene.add_child(game_over_screen)
-	game_over_screen.centered = true
-	game_over_screen.rect_min_size = Vector2(400, 200)
 	game_over_screen.show()
