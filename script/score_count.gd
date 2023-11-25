@@ -6,9 +6,9 @@ const MAX_FLOWERS_TO_HARVEST = 5
 
 func _ready():
 	# Connect to the signal emitted when a flower is harvested
-	plant_manager.connect("harvested_plant", Callable(self, "_on_flower_harvested"));
+	plant_manager.connect("harvested_plant", Callable(self, "_on_plant_harvested"));
 
-func _on_flower_harvested():
+func _on_plant_harvested():
 	plant_harvested_count += 1
 	text = "Score: " + str(plant_harvested_count)
 

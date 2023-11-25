@@ -4,8 +4,8 @@ extends Node2D
 var growth = 0;
 var turns_alive = 0;
 
-const JUVENILE = 3;
-const ADULT = 6;
+const JUVENILE = 2;
+const ADULT = 5;
 
 const DEAD = 10;
 
@@ -50,9 +50,7 @@ func set_phase(phase):
 
 func update_age():
 	var terrain_pos = terrain_map.local_to_map(global_position);
-
 	var grass_underneath = terrain_map.get_grass(terrain_pos.x, terrain_pos.y);
-
 	var water_ratio = (float)(grass_underneath.water_amt) / 100;
 	var sun_ratio = (float)(grass_underneath.sunlight_amt) / 100;
 

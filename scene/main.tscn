@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cdvrt3alfjcqp"]
+[gd_scene load_steps=19 format=3 uid="uid://cdvrt3alfjcqp"]
 
 [ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_rx26m"]
 [ext_resource type="Script" path="res://script/terrain_map.gd" id="3_bdwhm"]
@@ -49,6 +49,10 @@ atlas = ExtResource("5_6da1x")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="LabelSettings" id="LabelSettings_3gkfw"]
+font_color = Color(1, 1, 1, 0.372549)
+
+[sub_resource type="LabelSettings" id="LabelSettings_nhnr5"]
+font_color = Color(1, 1, 1, 0.152941)
 
 [node name="Main" type="Node2D"]
 
@@ -110,3 +114,11 @@ offset_bottom = 33.0
 text = "Score:"
 label_settings = SubResource("LabelSettings_3gkfw")
 script = ExtResource("11_pb80n")
+
+[node name="Controls" type="Label" parent="Labels"]
+offset_left = 7.0
+offset_top = 209.0
+offset_right = 241.0
+offset_bottom = 248.0
+text = "Z: Move, X: Plant, C: Harvest"
+label_settings = SubResource("LabelSettings_nhnr5")
