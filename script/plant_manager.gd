@@ -49,4 +49,4 @@ func update_adjacent_plant_bonus(pos):
 				bonus += 1;
 				
 	current_plant.adjacent_plant_bonus = bonus;
-		
+	

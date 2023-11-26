@@ -1,10 +1,11 @@
-extends Node
-
-class_name Grass
+class_name Grass extends Node
 
 const ABOVE_IS_SUNNY = 49;
 const BELOW_IS_WET = 33;
 const ABOVE_IS_DRY = 66;
+
+var x;
+var y;
 
 signal grass_changed;
 signal sun_given;
@@ -22,10 +23,12 @@ enum grass_type {
 	DRY_GRASS = 2
 };
 
-func _init():
+func _init(_x,_y):
 	var rnd = RandomNumberGenerator.new();
 	water_amt = rnd.randi_range(0, 100);
 	randomize_tile_properties();
+	x = _x;
+	y = _y;
 
 
 func randomize_tile_properties():
@@ -55,15 +58,14 @@ func get_wetness():
 	return tile_type;
 	
 func set_sunlight(sun):
-	var old_sunny = sunny;
 	
 	sunlight_amt = sun;
 	if (sunlight_amt > ABOVE_IS_SUNNY): 
 		sunny = true;
-		sun_given.emit();
+		sun_given.emit(self);
 	else: 
 		sunny = false;
-		sun_taken.emit();
+		sun_taken.emit(self);
 
 func get_sunlight():
 	return sunny;
@@ -72,6 +74,6 @@ func set_tile_type(type: grass_type):
 	if (tile_type == type): 
 		return;
 	tile_type = type;
-	grass_changed.emit();
+	grass_changed.emit(self);
 
 	
