@@ -6,9 +6,12 @@ const ABOVE_IS_SUNNY = 49;
 const BELOW_IS_WET = 33;
 const ABOVE_IS_DRY = 66;
 
+signal grass_changed;
+signal sun_given;
+signal sun_taken;
+
 var sunlight_amt: int = 0;
 var water_amt: int = 0;
-
 var tile_type: grass_type
 
 var sunny: bool = false;
@@ -33,6 +36,7 @@ func randomize_tile_properties():
 	set_sunlight(sunlight_amt);
 	set_wetness();
 	
+	
 func set_wetness():
 	
 	@warning_ignore("integer_division")
@@ -41,21 +45,33 @@ func set_wetness():
 	water_amt = clampi(water_amt, 0, 100);
 	
 	if (water_amt < BELOW_IS_WET):
-		tile_type = grass_type.WET_GRASS;
+		set_tile_type(grass_type.WET_GRASS);
 	elif (water_amt >= BELOW_IS_WET && water_amt <= ABOVE_IS_DRY):
-		tile_type = grass_type.NORMAL_GRASS;
+		set_tile_type(grass_type.NORMAL_GRASS)
 	elif (water_amt > ABOVE_IS_DRY):	
-		tile_type = grass_type.DRY_GRASS;
+		set_tile_type(grass_type.DRY_GRASS)
 
 func get_wetness():
 	return tile_type;
 	
 func set_sunlight(sun):
+	var old_sunny = sunny;
+	
 	sunlight_amt = sun;
-	if (sunlight_amt > ABOVE_IS_SUNNY):
+	if (sunlight_amt > ABOVE_IS_SUNNY): 
 		sunny = true;
-	else:
+		sun_given.emit();
+	else: 
 		sunny = false;
+		sun_taken.emit();
 
 func get_sunlight():
 	return sunny;
+	
+func set_tile_type(type: grass_type):
+	if (tile_type == type): 
+		return;
+	tile_type = type;
+	grass_changed.emit();
+
+	

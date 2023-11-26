@@ -8,6 +8,7 @@ var plantDict = Dictionary();
 signal harvested_plant;
 
 func plant_plant(pos):
+	if (is_plant_at_pos(pos)): return
 	var p = plant.instantiate();
 	p.global_position = terrain_map.map_to_local(pos);
 	plantDict[pos] = p;
@@ -22,7 +23,7 @@ func update_plants():
 			erase_plant(key);
 
 func harvest_plant(pos):
-	# Already checked to see if plant exists
+	if !is_plant_at_pos(pos): return;
 	var current_plant = plantDict.get(pos);
 	if (current_plant.growth >= current_plant.ADULT):
 		harvested_plant.emit();

@@ -1,62 +1,39 @@
 extends Node2D
-var a_star_grid: AStarGrid2D
 var current_id_path: Array[Vector2i];
 
 @onready var terrain_map = $"../../TerrainMap";
 @onready var turn_count = $"../../Labels/TurnCount";
 @onready var plant_manager = $"../Plants";
+var a_star: AStarWrapper = AStarWrapper.new();
 
 var target_position: Vector2
 var is_moving: bool
 
+@export var move_speed = 2;
 @export var max_move_range = 7;
-
-const GRID_SIZE = 16;
-const GRID_SPACE = Rect2i(0, 0, GRID_SIZE, GRID_SIZE)
-
-func _ready():
-	a_star_grid = AStarGrid2D.new()
-	a_star_grid.region = GRID_SPACE
-	a_star_grid.cell_size = Vector2(GRID_SIZE,GRID_SIZE);
-	a_star_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER;
-	a_star_grid.update();
-
-
-
 		
 func _physics_process(_delta):
 	move_from_path();
 
 func start_path():	
-	if (is_moving):
-		return;
+	if (is_moving): return;
 		
-	var id_path
 	var map_from_mouse = terrain_map.local_to_map(get_global_mouse_position());
+	var id_path: Array[Vector2i];
 	
-	if (is_moving):
-		id_path = a_star_grid.get_id_path(
-		terrain_map.local_to_map(target_position),
-		map_from_mouse
-		)
-	else:
-		id_path = a_star_grid.get_id_path(
-		terrain_map.local_to_map(global_position),
-		map_from_mouse
-		).slice(1);
+	if (is_moving): id_path = a_star.get_id_path(terrain_map.local_to_map(target_position), map_from_mouse);
+	else: id_path = a_star.get_id_path(get_player_map_pos(), map_from_mouse).slice(1);
 	
-	if (!id_path.is_empty() && id_path.size() <= max_move_range):
-		current_id_path = id_path;
+	if (!id_path.is_empty() && id_path.size() <= max_move_range): current_id_path = id_path;
 
 func move_from_path():
-	if current_id_path.is_empty():
-		return
+	if current_id_path.is_empty(): return;
 
 	if (!is_moving):
 		target_position = terrain_map.map_to_local(current_id_path.front());
 		is_moving = true;
 
-	global_position = global_position.move_toward(target_position, 1);
+	global_position = global_position.move_toward(target_position, move_speed);
 
 	if (global_position == target_position):
 		current_id_path.pop_front();
@@ -68,17 +45,22 @@ func move_from_path():
 			turn_count.next_turn();
 			
 func try_plant_plant(planting_pos: Vector2):
-	var player_map_pos: Vector2i = terrain_map.local_to_map(global_position);
 	var planting_map_pos: Vector2i = terrain_map.local_to_map(planting_pos);
-	var distance_squared: = pow(planting_map_pos.x - player_map_pos.x, 2) + pow(planting_map_pos.y - player_map_pos.y, 2);
-	if !is_moving && distance_squared == 1 && !plant_manager.is_plant_at_pos(planting_map_pos):
+	if !is_moving && get_distance_squared(planting_map_pos, get_player_map_pos()) == 1:
 		plant_manager.plant_plant(planting_map_pos);
 		turn_count.next_turn();
 
 func try_harvest_plant(harvest_pos: Vector2):
-	var player_map_pos: Vector2i = terrain_map.local_to_map(global_position);
 	var harvest_map_pos: Vector2i = terrain_map.local_to_map(harvest_pos);
-	var distance_squared = pow(harvest_map_pos.x - player_map_pos.x, 2) + pow(harvest_map_pos.y - player_map_pos.y, 2);
-	if !is_moving && distance_squared == 1 && plant_manager.is_plant_at_pos(harvest_map_pos):
+	if !is_moving && get_distance_squared(harvest_map_pos, get_player_map_pos()) == 1:
 		plant_manager.harvest_plant(harvest_map_pos);
 		turn_count.next_turn();
+		
+func get_player_map_pos():
+	return terrain_map.local_to_map(global_position);
+ 
+func get_distance_squared(pos1: Vector2i, pos2: Vector2i):
+	var x_squared: float = pow(pos1.x - pos2.x, 2);
+	var y_squared: float = pow(pos1.y - pos2.y, 2);
+	return sqrt(x_squared + y_squared);
+

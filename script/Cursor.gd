@@ -11,7 +11,6 @@ var is_visible = true;
 var move_player_command = Callable(movePlayer);
 var plant_command = Callable(plant_plant);
 var harvest_command = Callable(harvest_plant);
-#var selecting_command = Callable(selecting);
 var current_command: Callable;
 
 func _ready():
@@ -22,11 +21,11 @@ func _input(event):
 	
 	if(event.is_action_pressed("Move")):
 		current_command = move_player_command;
-	if(event.is_action_pressed("Plant")):
+	elif(event.is_action_pressed("Plant")):
 		current_command = plant_command;
-	if(event.is_action_pressed("Harvest")):
+	elif(event.is_action_pressed("Harvest")):
 		current_command = harvest_command;
-	if event.is_action_pressed("Select"):
+	elif event.is_action_pressed("Select"):
 		current_command.call();
 
 func set_new_cursor_location():
@@ -47,7 +46,6 @@ func selecting():
 		
 func movePlayer():
 	player.start_path();
-#	current_command = selecting_command;
 	
 func plant_plant():
 	player.try_plant_plant(get_global_mouse_position());
