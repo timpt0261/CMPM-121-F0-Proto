@@ -34,8 +34,8 @@ enabled=PackedStringArray("res://addons/github_to_itch/plugin.cfg")
 
 [github_to_itch]
 
-config/itch_username=""
-config/itch_project_name=""
+config/itch_username="mojius"
+config/itch_project_name="farm-strategy"
 
 [input]
 

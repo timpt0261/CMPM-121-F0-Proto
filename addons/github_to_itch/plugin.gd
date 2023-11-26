@@ -34,7 +34,7 @@ func _enter_tree():
 	timer.connect("timeout", _timer_timeout)
 	
 	add_child(timer)
-	
+		
 	_timer_timeout()
 	connect("project_settings_changed", func(): save(true))
 	add_tool_menu_item("Github To Itch Config", show_popup)
