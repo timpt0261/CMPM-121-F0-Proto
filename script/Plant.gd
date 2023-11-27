@@ -50,17 +50,8 @@ func update_age():
 	var water_ratio = (float)(grass_underneath.water_amt) / 100;
 	var sun_ratio = (float)(grass_underneath.sunlight_amt) / 100;
 	
-	var water_diff = water_ratio - sun_ratio;
-	var sun_diff = sun_ratio - water_ratio;
 	
-	if water_diff > OVERFLOWING:
-		growth += (sun_ratio) - (water_ratio) * adjacent_plant_bonus;
-		
-	elif sun_diff > TOO_SUNNY:
-		growth += -(sun_ratio) + (water_ratio) * adjacent_plant_bonus;
-		
-	else:
-		growth += (sun_ratio) + (water_ratio) * adjacent_plant_bonus;
+	growth += (sun_ratio) + (water_ratio) * adjacent_plant_bonus;
 
 
 	if (growth >= JUVENILE && growth < ADULT):
