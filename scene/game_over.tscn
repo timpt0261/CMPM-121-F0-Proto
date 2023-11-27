@@ -15,3 +15,4 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Game Clear!"
 placeholder_text = "Game Over"
+editable = false

@@ -53,8 +53,8 @@ func try_plant_plant(planting_pos: Vector2):
 func try_harvest_plant(harvest_pos: Vector2):
 	var harvest_map_pos: Vector2i = terrain_map.local_to_map(harvest_pos);
 	if !is_moving && get_distance_squared(harvest_map_pos, get_player_map_pos()) == 1:
-		plant_manager.harvest_plant(harvest_map_pos);
-		turn_count.next_turn();
+		if(plant_manager.harvest_plant(harvest_map_pos)):
+			turn_count.next_turn();
 		
 func get_player_map_pos():
 	return terrain_map.local_to_map(global_position);
