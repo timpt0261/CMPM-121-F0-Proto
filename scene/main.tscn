@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dcqniyr0oya1k" path="res://tile/highlight.png" id="3_j1xgt"]
 [ext_resource type="Script" path="res://script/Cursor.gd" id="5_2d0sc"]
 [ext_resource type="Texture2D" uid="uid://dflsj3xadflpn" path="res://sprite/jessie.png" id="5_6da1x"]
-[ext_resource type="Script" path="res://script/player.gd" id="5_s21wj"]
+[ext_resource type="Script" path="res://script/Player.gd" id="5_s21wj"]
 [ext_resource type="Script" path="res://script/plant_manager.gd" id="8_14ev8"]
 [ext_resource type="Script" path="res://script/turn_count.gd" id="8_sqolj"]
 [ext_resource type="Script" path="res://script/label_manager.gd" id="9_bgp6k"]
