@@ -48,11 +48,6 @@ jobs:
      mkdir -p ~/.local/share/godot/export_templates/4.1.stable
      mv ./templates/* ~/.local/share/godot/export_templates/4.1.stable
   
-  - name: Export Web
-    run: |
-     mkdir -p ./
-     ./godot --headless --path ./ --export-release "Web" ./
-    
   - name: Export Windows Desktop
     run: |
      mkdir -p ./builds/win
@@ -137,6 +132,9 @@ jobs:
     
     - name: Login To Butler
       run: ./butler login
+    
+    - name: Push Windows Desktop to Itch
+      run: ./butler push ./builds/win mojius/farm-strategy:win --userversion-file ./VERSION/VERSION.txt
     
 
  Cleanup:
