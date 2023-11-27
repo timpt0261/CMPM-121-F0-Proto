@@ -1,0 +1,29 @@
+[
+	{
+		"Name": "Daisy",
+		"sprite": "res://sprite/daisy.png",
+		"points": 3,
+		"juvenile": 2,
+		"adult": 5,
+		"dead": 10,
+		"max_turns": 12,
+	},
+	{
+		"Name": "Zucchini",
+		"sprite": "res://sprite/zucchini.png",
+		"points": 5,
+		"juvenile": 2,
+		"adult": 7,
+		"dead": 10,
+		"max_turns": 14,
+	},
+	{
+		"Name": "Strawberry",
+		"sprite": "res://sprite/strawberry.png",
+		"points": 7,
+		"juvenile": 2,
+		"adult": 6,
+		"dead": 10,
+		"max_turns": 12,
+	},
+]

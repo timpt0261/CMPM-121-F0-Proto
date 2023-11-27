@@ -16,40 +16,11 @@ var plant_recipe;
 var sprite;
 var points;
 var max_turns;
-
-
-var plant_list = [
-	{
-		"Name": "Daisy",
-		"sprite": "res://sprite/daisy.png",
-		"points": 3,
-		"juvenile": 2,
-		"adult": 5,
-		"dead": 10,
-		"max_turns": 12,
-	},
-	{
-		"Name": "Zucchini",
-		"sprite": "res://sprite/zucchini.png",
-		"points": 5,
-		"juvenile": 2,
-		"adult": 7,
-		"dead": 10,
-		"max_turns": 14,
-	},
-	{
-		"Name": "Strawberry",
-		"sprite": "res://sprite/strawberry.png",
-		"points": 7,
-		"juvenile": 2,
-		"adult": 6,
-		"dead": 10,
-		"max_turns": 12,
-	},
-]
+var plant_list;
 	
 func _ready():
 	sprite = $"Sprite";
+	plant_list = get_plant_list("res://data/plants.json");
 	initialize_plant();
 	set_phase(0);
 
@@ -77,6 +48,7 @@ func update_age():
 	var water_ratio = (float)(grass_underneath.water_amt) / 100;
 	var sun_ratio = (float)(grass_underneath.sunlight_amt) / 100;
 	
+
 	
 	growth += (sun_ratio) + (water_ratio) * adjacent_plant_bonus;
 	if (growth >= JUVENILE && growth < ADULT):
@@ -88,3 +60,9 @@ func update_age():
 		return false;
 		
 	return true;
+
+func get_plant_list (file_path):
+	var file = FileAccess.open(file_path, FileAccess.READ);
+	var plant_as_text = file.get_as_text();
+	var plant_as_array = JSON.parse_string(plant_as_text);
+	return plant_as_array;
