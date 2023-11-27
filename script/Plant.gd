@@ -9,6 +9,8 @@ var ADULT;
 var DEAD;
 
 const REGION_SIZE = 16;
+const OVERFLOWING = 80;
+const TOO_SUNNY = 80;
 
 var adjacent_plant_bonus: int = 0;
 
@@ -28,7 +30,7 @@ func _ready():
 func initialize_plant():
 	var rnd = RandomNumberGenerator.new();
 	plant_recipe = plant_list[rnd.randi_range(0, plant_list.size() - 1)];
-	points = plant_recipe.get(points);
+	points = plant_recipe.get("points");
 	JUVENILE = plant_recipe.get("juvenile");
 	ADULT = plant_recipe.get("adult");
 	DEAD = plant_recipe.get("dead");
@@ -48,9 +50,19 @@ func update_age():
 	var water_ratio = (float)(grass_underneath.water_amt) / 100;
 	var sun_ratio = (float)(grass_underneath.sunlight_amt) / 100;
 	
-
+	var water_diff = water_ratio - sun_ratio;
+	var sun_diff = sun_ratio - water_ratio;
 	
-	growth += (sun_ratio) + (water_ratio) * adjacent_plant_bonus;
+	if water_diff > OVERFLOWING:
+		growth += (sun_ratio) - (water_ratio) * adjacent_plant_bonus;
+		
+	elif sun_diff > TOO_SUNNY:
+		growth += -(sun_ratio) + (water_ratio) * adjacent_plant_bonus;
+		
+	else:
+		growth += (sun_ratio) + (water_ratio) * adjacent_plant_bonus;
+
+
 	if (growth >= JUVENILE && growth < ADULT):
 		set_phase(1);
 	elif(growth >= ADULT && growth < DEAD):
