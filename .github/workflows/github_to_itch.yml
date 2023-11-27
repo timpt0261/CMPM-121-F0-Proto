@@ -9,8 +9,7 @@ on:
   - main
 env:
  BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }} # Needs to be added through github
- DISCORD_WEBHOOK: ${{secrets.DISCORD_WEBHOOK}} # Needs to be added through github
- GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ GITHUB_TOKEN: ${{ secrets.GH_CREDENTIALS }}
  IS_MAIN: ${{ contains(github.ref, 'main') }}
  PROJECT_NAME: "CMPM-121-Final"
 
