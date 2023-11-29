@@ -1,0 +1,29 @@
+[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://cyu8h63l01ot2"]
+
+[ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_pgl8l"]
+[ext_resource type="Texture2D" uid="uid://dcqniyr0oya1k" path="res://tile/highlight.png" id="2_2mgmw"]
+[ext_resource type="Texture2D" uid="uid://h3pwbiwgoyw" path="res://tile/selected.png" id="3_sketr"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1p878"]
+texture = ExtResource("1_pgl8l")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gvwft"]
+texture = ExtResource("2_2mgmw")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wrc1r"]
+texture = ExtResource("3_sketr")
+0:0/0 = 0
+
+[resource]
+custom_data_layer_0/name = "walkable"
+custom_data_layer_0/type = 1
+sources/0 = SubResource("TileSetAtlasSource_1p878")
+sources/1 = SubResource("TileSetAtlasSource_gvwft")
+sources/2 = SubResource("TileSetAtlasSource_wrc1r")
