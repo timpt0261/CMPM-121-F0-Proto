@@ -192,6 +192,6 @@ text = "Score:"
 label_settings = SubResource("LabelSettings_3gkfw")
 script = ExtResource("11_pb80n")
 
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager" method="save_cell_state"]
+[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager" method="game_state_to_array"]
 [connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainMap" method="update_grass"]
 [connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainMap/Plants" method="update_plants"]
