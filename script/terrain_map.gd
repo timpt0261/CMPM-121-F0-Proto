@@ -22,11 +22,11 @@ func init_grass(x: int, y: int):
 	set_cell(layers_IDs.GRASS, Vector2(x,y), layers_IDs.GRASS, Vector2i(g.tile_type,0));	
 	if (g.sunny):
 		set_cell(layers_IDs.HIGHLIGHT, Vector2(x,y), layers_IDs.HIGHLIGHT, Vector2i(0,0));
-	terrain_dict[Vector2(x,y)] = g;
+	terrain_dict[Vector2i(x,y)] = g;
 	bind_arguments(g);
 	
 func get_grass(x,y):
-	var key = Vector2(x,y);
+	var key = Vector2i(x,y);
 	if (terrain_dict.has(key)):
 		return terrain_dict[key];
 
