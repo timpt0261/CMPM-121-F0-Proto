@@ -1,5 +1,6 @@
-[gd_scene load_steps=20 format=3 uid="uid://cdvrt3alfjcqp"]
+[gd_scene load_steps=19 format=3 uid="uid://cdvrt3alfjcqp"]
 
+[ext_resource type="Script" path="res://script/game_state_manager.gd" id="1_2nue2"]
 [ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_rx26m"]
 [ext_resource type="Script" path="res://script/terrain_map.gd" id="3_bdwhm"]
 [ext_resource type="Texture2D" uid="uid://h3pwbiwgoyw" path="res://tile/selected.png" id="3_fq6s7"]
@@ -9,9 +10,7 @@
 [ext_resource type="Script" path="res://script/Player.gd" id="5_s21wj"]
 [ext_resource type="Script" path="res://script/plant_manager.gd" id="8_14ev8"]
 [ext_resource type="Script" path="res://script/turn_count.gd" id="8_sqolj"]
-[ext_resource type="Script" path="res://script/label_manager.gd" id="9_bgp6k"]
 [ext_resource type="Script" path="res://script/score_count.gd" id="11_pb80n"]
-[ext_resource type="Script" path="res://script/game_state_manager.gd" id="12_ikhrl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aifgd"]
 texture = ExtResource("1_rx26m")
@@ -58,7 +57,66 @@ font_color = Color(1, 1, 1, 0.152941)
 [node name="Main" type="Node2D"]
 
 [node name="game_state_manager" type="Node2D" parent="."]
-script = ExtResource("12_ikhrl")
+position = Vector2(0, -5)
+script = ExtResource("1_2nue2")
+
+[node name="UI" type="Control" parent="game_state_manager"]
+layout_direction = 1
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1.0
+offset_top = -28.0
+offset_right = 286.0
+offset_bottom = 255.0
+size_flags_horizontal = 10
+size_flags_vertical = 8
+
+[node name="background" type="ColorRect" parent="game_state_manager/UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -31.0
+offset_right = 42.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.188235, 0.188235, 0.188235, 0.960784)
+
+[node name="save" type="Button" parent="game_state_manager/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.126263
+anchor_top = -0.762767
+anchor_right = 1.95751
+anchor_bottom = 1.0742
+offset_left = 230.015
+offset_top = 251.863
+offset_right = -243.89
+offset_bottom = -237.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Save"
+clip_text = true
+metadata/save = false
+
+[node name="load" type="Button" parent="game_state_manager/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.126263
+anchor_top = -0.762767
+anchor_right = 1.95751
+anchor_bottom = 1.0742
+offset_left = 230.015
+offset_top = 308.863
+offset_right = -243.89
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Load
+"
+clip_text = true
 
 [node name="TerrainMap" type="TileMap" parent="game_state_manager"]
 tile_set = SubResource("TileSet_mkbp6")
@@ -94,39 +152,46 @@ texture = SubResource("AtlasTexture_71hdk")
 [node name="Plants" type="Node2D" parent="game_state_manager/TerrainMap"]
 script = ExtResource("8_14ev8")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-16, -64)
+anchor_mode = 0
+zoom = Vector2(0.75, 0.75)
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+
 [node name="Labels" type="Node2D" parent="."]
-script = ExtResource("9_bgp6k")
 
 [node name="TurnCount" type="Label" parent="Labels"]
 z_index = 30
 texture_filter = 1
-offset_left = 8.0
-offset_top = 5.0
-offset_right = 99.0
-offset_bottom = 44.0
+offset_left = 6.0
+offset_top = -44.0
+offset_right = 97.0
+offset_bottom = -5.0
 text = "Turn #:"
 label_settings = SubResource("LabelSettings_3gkfw")
 script = ExtResource("8_sqolj")
 
+[node name="Controls" type="Label" parent="Labels"]
+offset_left = 6.0
+offset_top = 253.0
+offset_right = 240.0
+offset_bottom = 292.0
+text = "Z: Move, X: Plant, C: Harvest"
+label_settings = SubResource("LabelSettings_nhnr5")
+
 [node name="ScoreCount" type="Label" parent="Labels"]
 z_index = 30
 texture_filter = 1
-offset_left = 166.0
-offset_top = 7.0
-offset_right = 220.0
-offset_bottom = 33.0
+offset_left = 171.0
+offset_top = -44.0
+offset_right = 225.0
+offset_bottom = -18.0
 text = "Score:"
 label_settings = SubResource("LabelSettings_3gkfw")
 script = ExtResource("11_pb80n")
 
-[node name="Controls" type="Label" parent="Labels"]
-offset_left = 7.0
-offset_top = 209.0
-offset_right = 241.0
-offset_bottom = 248.0
-text = "Z: Move, X: Plant, C: Harvest"
-label_settings = SubResource("LabelSettings_nhnr5")
-
+[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager" method="save_cell_state"]
 [connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainMap" method="update_grass"]
 [connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainMap/Plants" method="update_plants"]
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager" method="save_cell_state"]
