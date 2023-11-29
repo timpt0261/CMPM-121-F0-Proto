@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var terrain_map = $"../../../TerrainMap";
+var plant_type_id
 var growth = 0;
 var turns_alive = 0;
 
@@ -29,7 +30,8 @@ func _ready():
 
 func initialize_plant():
 	var rnd = RandomNumberGenerator.new();
-	plant_recipe = plant_list[rnd.randi_range(0, plant_list.size() - 1)];
+	plant_type_id = rnd.randi_range(0, plant_list.size() - 1)
+	plant_recipe = plant_list[plant_type_id];
 	points = plant_recipe.get("points");
 	JUVENILE = plant_recipe.get("juvenile");
 	ADULT = plant_recipe.get("adult");

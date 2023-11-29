@@ -3,7 +3,7 @@ class_name TerrainMap extends TileMap
 @onready var grass = preload("res://script/Grass.gd");
 @onready var plant_manager = $"Plants"
 
-const MASTER_GRID_SIZE = 256;
+const MASTER_GRID_SIZE = 16;
 var terrain_dict = {};
 
 enum layers_IDs {

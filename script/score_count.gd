@@ -1,6 +1,6 @@
 extends Label
 
-@onready var plant_manager = $"../../TerrainMap/Plants";
+@onready var plant_manager = $"../../game_state_manager/TerrainMap/Plants";
 
 
 func _ready():

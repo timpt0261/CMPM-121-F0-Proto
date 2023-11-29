@@ -2,7 +2,7 @@ extends Node2D
 var current_id_path: Array[Vector2i];
 
 @onready var terrain_map = $"../../TerrainMap";
-@onready var turn_count = $"../../Labels/TurnCount";
+@onready var turn_count = $"../../../Labels/TurnCount";
 @onready var plant_manager = $"../Plants";
 var a_star: AStarWrapper = AStarWrapper.new();
 
