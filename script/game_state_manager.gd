@@ -5,15 +5,13 @@ class_name game_state_manager
 @onready var plant_manager = $TerrainMap/Plants;
 @onready var player = $TerrainMap/Player;
 @onready var turn_count = $"../Labels/TurnCount";
+@onready var score_count = $"../Labels/ScoreCount";
 @onready var MASTER_GRID_SIZE = terrain_map.MASTER_GRID_SIZE;
 
-var cell_state_array: Array;
-var cell_state_byte_array: PackedByteArray
+var game_state_byte_array: game_state_array
 
 func _ready():
-	cell_state_array = [];
-	cell_state_array.resize(MASTER_GRID_SIZE*MASTER_GRID_SIZE)
-	game_state_to_array()
+	pass
 	
 func game_state_to_array():
 	#player_pos first 12 bytes
@@ -22,11 +20,11 @@ func game_state_to_array():
 	var score_number = plant_manager.get_plant_harvested_amount();
 	var terrain_dict = terrain_map.terrain_dict
 	var plant_dict = plant_manager.plantDict
-	cell_state_byte_array = PackedByteArray()
+	game_state_byte_array = game_state_array.new(MASTER_GRID_SIZE)
 	
-	cell_state_byte_array.append_array(var_to_bytes(player_pos))
-	cell_state_byte_array.append_array(var_to_bytes(turn_count.turn_number))
-	cell_state_byte_array.append_array(var_to_bytes(score_number))
+	game_state_byte_array.push(player_pos)
+	game_state_byte_array.push(turn_count.turn_number)
+	game_state_byte_array.push(score_number)
 	
 	
 	#32 bytes per cell
@@ -42,10 +40,10 @@ func game_state_to_array():
 				var p = plant_dict[pos]
 				growth = p.growth
 				plant_type_id = p.plant_type_id
-			cell_state_byte_array.append_array(var_to_bytes(hydration))
-			cell_state_byte_array.append_array(var_to_bytes(sunlight))
-			cell_state_byte_array.append_array(var_to_bytes(plant_type_id))
-			cell_state_byte_array.append_array(var_to_bytes(growth))
+			game_state_byte_array.push(hydration)
+			game_state_byte_array.push(sunlight)
+			game_state_byte_array.push(plant_type_id)
+			game_state_byte_array.push(growth)
 
 
 #Turn Count
@@ -62,7 +60,7 @@ func do_save():
 	game_state_to_array()
 	# Save the PackedByteArray to a file
 	var file = FileAccess.open("res://saved_data/game_save.dat", FileAccess.WRITE);
-	file.store_buffer(cell_state_byte_array)
+	file.store_buffer(game_state_byte_array.as_byte_array())
 	file.close()
 
 func do_load():
@@ -70,36 +68,31 @@ func do_load():
 	var file:FileAccess;
 	if file.file_exists("res://saved_data/game_save.dat"):
 		file.open("res://saved_data/game_save.dat", FileAccess.READ);
-		var byte_array = PackedByteArray(file.get_buffer(file.get_len()));
+		game_state_byte_array.set_byte_array(PackedByteArray(file.get_buffer(file.get_len())));
 		file.close();
-		# Decode the PackedByteArray and update the game state
-		load_cell_state(byte_array);
+		update_game_state()
 	else:
 		printerr("Save Not Found");
 
-func load_cell_state(byte_array: PackedByteArray):
-	# Clear existing state (if any) before loading
-	cell_state_array.clear()
-#	update_game_state()
+func update_game_state():
+	# Update the terrain, plants, player, and other game state elements
+	player.position = game_state_byte_array.get_player_position()
+	# based on the loaded cell state array
+	var MASTER_GRID_SIZE = terrain_map.MASTER_GRID_SIZE
+	for y in MASTER_GRID_SIZE:
+		for x in MASTER_GRID_SIZE:
+			var pos = Vector2i(x, y)
+			var g = terrain_map.terrain_dict[pos]
 
-#func update_game_state():
-#	# Update the terrain, plants, player, and other game state elements
-#	# based on the loaded cell state array
-#	var MASTER_GRID_SIZE = terrain_map.MASTER_GRID_SIZE
-#	for i in range(MASTER_GRID_SIZE * MASTER_GRID_SIZE):
-#		var pos = Vector2(i % MASTER_GRID_SIZE, i / MASTER_GRID_SIZE)
-#		var g = terrain_map.terrain_dict[pos]
-#		var cell_data = cell_state_array[i]
-#
-#		# Update terrain and plant information
-#		g.set_wetness(cell_data.hydration)
-#		g.set_sunlight(cell_data.sun)
-#
-#		if cell_data.plant_type_id >= 0:
-#			plant_manager.plant_plant(pos, cell_data.plant_type_id, cell_data.plant_growth)
-#
-#	# Additional game state updates based on the loaded data
-#	var additional_data = cell_state_array[-1]  # Get the last element in the array
-#	tunr_count.text = str(additional_data.turn_count)
-#	score_count.text = str(additional_data.score_count)
+			# Update terrain and plant information
+			g.set_wetness(game_state_byte_array.get_hydration(pos))
+			g.set_sunlight(game_state_byte_array.get_sunlight(pos))
+
+			var plant_id = game_state_byte_array.get_plant_id(pos)
+			if plant_id >= 0:
+				plant_manager.plant_plant(pos, plant_id, game_state_byte_array.get_growth(pos))
+
+	# Additional game state updates based on the loaded data
+	turn_count.text = str(game_state_byte_array.get_turn_count())
+	score_count.text = str(game_state_byte_array.get_score())
 #
