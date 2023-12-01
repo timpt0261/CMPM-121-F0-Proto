@@ -10,6 +10,10 @@ class_name game_state_manager
 
 var game_state_byte_array: game_state_array
 
+var auto_save_length:int = 5;
+var autosave_start: int = 0; # 60 second in 1 min
+var is_playing: bool = false;
+
 func _ready():
 	pass
 	
@@ -96,3 +100,14 @@ func update_game_state():
 	turn_count.text = str(game_state_byte_array.get_turn_count())
 	score_count.text = str(game_state_byte_array.get_score())
 #
+func _physics_process(delta):
+	if(is_playing):
+		auto_save()
+
+func auto_save():
+	var time_passed = Time.get_unix_time_from_system() - autosave_start;
+	if(time_passed > (auto_save_length * 60)):
+		do_save();
+		autosave_start = Time.get_unix_time_from_system();
+	
+	
