@@ -16,3 +16,6 @@ mono_crash.*.json
 
 # Just cause
 *.tmp
+
+# Gabes Ignores
+GabesGit/
