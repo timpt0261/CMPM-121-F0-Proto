@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cdvrt3alfjcqp"]
+[gd_scene load_steps=20 format=3 uid="uid://cdvrt3alfjcqp"]
 
 [ext_resource type="Script" path="res://script/game_state_manager.gd" id="1_2nue2"]
 [ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_rx26m"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://h3pwbiwgoyw" path="res://tile/selected.png" id="3_fq6s7"]
 [ext_resource type="Texture2D" uid="uid://dcqniyr0oya1k" path="res://tile/highlight.png" id="3_j1xgt"]
 [ext_resource type="Script" path="res://script/Cursor.gd" id="5_2d0sc"]
+[ext_resource type="Script" path="res://script/terrain_renderer.gd" id="5_4cky6"]
 [ext_resource type="Texture2D" uid="uid://dflsj3xadflpn" path="res://sprite/jessie.png" id="5_6da1x"]
 [ext_resource type="Script" path="res://script/Player.gd" id="5_s21wj"]
 [ext_resource type="Script" path="res://script/plant_manager.gd" id="8_14ev8"]
@@ -118,7 +119,7 @@ text = "Load
 "
 clip_text = true
 
-[node name="TerrainMap" type="TileMap" parent="game_state_manager"]
+[node name="TerrainRenderer" type="TileMap" parent="game_state_manager"]
 tile_set = SubResource("TileSet_mkbp6")
 format = 2
 layer_0/name = "Grass"
@@ -136,21 +137,24 @@ layer_2/y_sort_enabled = false
 layer_2/y_sort_origin = 0
 layer_2/z_index = 50
 layer_2/tile_data = PackedInt32Array()
-script = ExtResource("3_bdwhm")
+script = ExtResource("5_4cky6")
 
-[node name="Cursor" type="Node2D" parent="game_state_manager/TerrainMap"]
+[node name="Cursor" type="Node2D" parent="game_state_manager/TerrainRenderer"]
 script = ExtResource("5_2d0sc")
 
-[node name="Player" type="Node2D" parent="game_state_manager/TerrainMap"]
+[node name="Player" type="Node2D" parent="game_state_manager/TerrainRenderer"]
 position = Vector2(120, 120)
 script = ExtResource("5_s21wj")
 
-[node name="Sprite2D" type="Sprite2D" parent="game_state_manager/TerrainMap/Player"]
+[node name="Sprite2D" type="Sprite2D" parent="game_state_manager/TerrainRenderer/Player"]
 position = Vector2(0, -1)
 texture = SubResource("AtlasTexture_71hdk")
 
-[node name="Plants" type="Node2D" parent="game_state_manager/TerrainMap"]
+[node name="Plants" type="Node2D" parent="game_state_manager/TerrainRenderer"]
 script = ExtResource("8_14ev8")
+
+[node name="TerrainMap" type="Node2D" parent="game_state_manager"]
+script = ExtResource("3_bdwhm")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-16, -64)
@@ -193,5 +197,5 @@ label_settings = SubResource("LabelSettings_3gkfw")
 script = ExtResource("11_pb80n")
 
 [connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager" method="game_state_to_array"]
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainMap" method="update_grass"]
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainMap/Plants" method="update_plants"]
+[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainRenderer" method="update_grass"]
+[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainRenderer/Plants" method="update_plants"]
