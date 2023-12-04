@@ -1,4 +1,4 @@
-class_name Plant extends Node2D
+class_name Plant extends Sprite2D
 
 @onready var terrain_map = $"../../../TerrainMap";
 var plant_type_id
@@ -15,36 +15,31 @@ const TOO_SUNNY = 80;
 
 var adjacent_plant_bonus: int = 0;
 
-var plant_recipe;
-var sprite;
+var plant_template;
 var points;
 var max_turns;
-var plant_list;
+
+func _init(plant_template):
+	self.plant_template = plant_template
 	
 func _ready():
-	sprite = $"Sprite";
-	plant_list = get_plant_list("res://data/plants.json");
 	initialize_plant();
 	set_phase(0);
 
 
 func initialize_plant():
 	var rnd = RandomNumberGenerator.new();
-	plant_type_id = rnd.randi_range(0, plant_list.size() - 1)
-	plant_recipe = plant_list[plant_type_id];
-	points = plant_recipe.get("points");
-	JUVENILE = plant_recipe.get("juvenile");
-	ADULT = plant_recipe.get("adult");
-	DEAD = plant_recipe.get("dead");
-	max_turns = plant_recipe.get("max_turns");
+	points = plant_template.get("points");
+	JUVENILE = plant_template.get("juvenile");
+	ADULT = plant_template.get("adult");
+	DEAD = plant_template.get("dead");
+	max_turns = plant_template.get("max_turns");
 	
 func set_phase(phase):
 	var atlas_tex = AtlasTexture.new();
-	atlas_tex.atlas = load(plant_recipe.get("sprite"));
-	
-	
+	atlas_tex.atlas = load(plant_template.get("sprite"));
 	atlas_tex.region = Rect2(phase * REGION_SIZE, 0, REGION_SIZE, REGION_SIZE);
-	sprite.texture = atlas_tex;
+	texture = atlas_tex;
 
 func update_age():
 	var terrain_pos = terrain_map.pixel_to_grid(global_position);
@@ -65,9 +60,3 @@ func update_age():
 		return false;
 		
 	return true;
-
-func get_plant_list (file_path):
-	var file = FileAccess.open(file_path, FileAccess.READ);
-	var plant_as_text = file.get_as_text();
-	var plant_as_array = JSON.parse_string(plant_as_text);
-	return plant_as_array;
