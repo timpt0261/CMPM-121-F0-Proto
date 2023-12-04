@@ -8,6 +8,15 @@ class_name game_state_manager
 @onready var score_count = $"../Labels/ScoreCount";
 @onready var MASTER_GRID_SIZE = terrain_map.MASTER_GRID_SIZE;
 
+#buttons
+@onready var save:Button = $"UI/save";
+@onready var load:Button = $"UI/load";
+@onready var undo:Button = $"UI/undo";
+@onready var redo:Button =$"UI/redo";
+
+var game_state_stacks: Array[game_state_array] = [];
+var current_snapshot_index: int = -1;
+
 var game_state_byte_array: game_state_array
 
 var auto_save_length:int = 5;
@@ -15,7 +24,8 @@ var autosave_start: int = 0; # 60 second in 1 min
 var is_playing: bool = false;
 
 func _ready():
-	pass
+	create_snapshot()
+	
 	
 func game_state_to_array():
 	#player_pos first 12 bytes
@@ -61,6 +71,7 @@ func game_state_to_array():
 
 
 func do_save():
+	create_snapshot()
 	game_state_to_array()
 	# Save the PackedByteArray to a file
 	var file = FileAccess.open("res://saved_data/game_save.dat", FileAccess.WRITE);
@@ -77,7 +88,12 @@ func do_load():
 		update_game_state()
 	else:
 		printerr("Save Not Found");
-
+		
+func create_snapshot():
+	var snapshot = game_state_byte_array.duplicate();
+	game_state_stacks.append(snapshot);
+	current_snapshot_index = game_state_stacks.size() -1;
+	
 func update_game_state():
 	# Update the terrain, plants, player, and other game state elements
 	player.position = game_state_byte_array.get_player_position()
@@ -110,4 +126,16 @@ func auto_save():
 		do_save();
 		autosave_start = Time.get_unix_time_from_system();
 	
+
+func do_undo():
+	# Should change the the current byte array to last one in stack
+	if(current_snapshot_index > 0 ):
+		current_snapshot_index -= 1
+		game_state_byte_array = game_state_stacks[current_snapshot_index];
+		update_game_state();
 	
+func do_redo():
+	if current_snapshot_index < game_state_stacks.size() - 1:
+		current_snapshot_index += 1
+		game_state_byte_array = game_state_stacks[current_snapshot_index].duplicate()
+		update_game_state()

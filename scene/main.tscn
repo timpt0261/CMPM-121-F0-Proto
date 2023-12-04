@@ -109,13 +109,46 @@ anchor_top = -0.762767
 anchor_right = 1.95751
 anchor_bottom = 1.0742
 offset_left = 230.015
-offset_top = 308.863
+offset_top = 291.862
 offset_right = -243.89
-offset_bottom = -180.0
+offset_bottom = -196.999
 grow_horizontal = 2
 grow_vertical = 2
 text = "Load
 "
+clip_text = true
+
+[node name="undo" type="Button" parent="game_state_manager/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.126263
+anchor_top = -0.762767
+anchor_right = 1.95751
+anchor_bottom = 1.0742
+offset_left = 230.015
+offset_top = 363.863
+offset_right = -238.89
+offset_bottom = -124.999
+grow_horizontal = 2
+grow_vertical = 2
+text = "Undo"
+clip_text = true
+metadata/save = false
+
+[node name="redo" type="Button" parent="game_state_manager/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.126263
+anchor_top = -0.762767
+anchor_right = 1.95751
+anchor_bottom = 1.0742
+offset_left = 232.088
+offset_top = 403.621
+offset_right = -241.817
+offset_bottom = -85.2406
+grow_horizontal = 2
+grow_vertical = 2
+text = "Redo"
 clip_text = true
 
 [node name="TerrainMap" type="TileMap" parent="game_state_manager"]

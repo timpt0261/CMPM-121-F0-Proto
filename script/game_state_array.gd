@@ -18,6 +18,9 @@ func _init(side_length):
 func clear():
 	byte_array.clear()
 	
+func duplicate():
+	return byte_array.duplicate()
+	
 func set_byte_array(new_byte_array: PackedByteArray):
 	byte_array = new_byte_array
 	
