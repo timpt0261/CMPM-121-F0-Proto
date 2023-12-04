@@ -1,4 +1,4 @@
-extends Node2D
+class_name Plant extends Node2D
 
 @onready var terrain_map = $"../../../TerrainMap";
 var plant_type_id
@@ -47,10 +47,10 @@ func set_phase(phase):
 	sprite.texture = atlas_tex;
 
 func update_age():
-	var terrain_pos = terrain_map.local_to_map(global_position);
+	var terrain_pos = terrain_map.pixel_to_grid(global_position);
 	var grass_underneath = terrain_map.get_grass(terrain_pos.x, terrain_pos.y);
-	var water_ratio = (float)(grass_underneath.water_amt) / 100;
-	var sun_ratio = (float)(grass_underneath.sunlight_amt) / 100;
+	var water_ratio = (float)(grass_underneath.get_hydration()) / 100;
+	var sun_ratio = (float)(grass_underneath.get_sunlight()) / 100;
 	
 	
 	growth += (sun_ratio) + (water_ratio) * adjacent_plant_bonus;

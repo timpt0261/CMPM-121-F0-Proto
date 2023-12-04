@@ -1,14 +1,14 @@
 extends Node2D
-class_name game_state_manager
+class_name GameStateManager
 
 @onready var terrain_map = $TerrainMap;
-@onready var plant_manager = $TerrainMap/Plants;
-@onready var player = $TerrainMap/Player;
-@onready var turn_count = $"../Labels/TurnCount";
-@onready var score_count = $"../Labels/ScoreCount";
+@onready var plant_manager = $"TerrainMap/Plants";
+@onready var player = $Player;
+@onready var turn_count = $"Labels/TurnCount";
+@onready var score_count = $"Labels/ScoreCount";
 @onready var MASTER_GRID_SIZE = terrain_map.MASTER_GRID_SIZE;
 
-var game_state_byte_array: game_state_array
+var game_state_byte_array: GameStateArray
 
 var auto_save_length:int = 5;
 var autosave_start: int = 0; # 60 second in 1 min
@@ -24,7 +24,7 @@ func game_state_to_array():
 	var score_number = plant_manager.get_plant_harvested_amount();
 	var terrain_dict = terrain_map.terrain_dict
 	var plant_dict = plant_manager.plantDict
-	game_state_byte_array = game_state_array.new(MASTER_GRID_SIZE)
+	game_state_byte_array = GameStateArray.new(MASTER_GRID_SIZE)
 	
 	game_state_byte_array.push(player_pos)
 	game_state_byte_array.push(turn_count.turn_number)

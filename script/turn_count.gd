@@ -1,4 +1,4 @@
-extends Label
+class_name TurnCount extends Label
 
 
 signal next_turn_signal;

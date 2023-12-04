@@ -1,4 +1,4 @@
-class_name Cell extends Node
+class_name Cell
 
 const ABOVE_IS_SUNNY = 49;
 const BELOW_IS_WET = 33;
@@ -26,12 +26,12 @@ func _init(position: Vector2i, hydration = -1, sunlight = -1):
 	self.position = position
 	var rnd = RandomNumberGenerator.new();
 	if hydration < 0:
-		self.hydration = rnd.randi_range(0, 100);
+		hydration = rnd.randi_range(0,100)
 	if sunlight < 0:
-		self.sunlight = rnd.randi_range(0,100);
+		sunlight = rnd.randi_range(0, 100)
+	set_sunlight(hydration);
+	set_hydration(sunlight);
 		
-
-
 func randomize_tile_properties():
 	var rnd = RandomNumberGenerator.new();
 	set_sunlight(rnd.randi_range(0,100));

@@ -1,4 +1,4 @@
-class_name game_state_array
+class_name GameStateArray
 
 const PLAYER_POSITION_INDEX = 0
 const TURN_COUNT_INDEX = 12

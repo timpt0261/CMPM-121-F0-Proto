@@ -5,12 +5,12 @@
 [ext_resource type="Script" path="res://script/terrain_map.gd" id="3_bdwhm"]
 [ext_resource type="Texture2D" uid="uid://h3pwbiwgoyw" path="res://tile/selected.png" id="3_fq6s7"]
 [ext_resource type="Texture2D" uid="uid://dcqniyr0oya1k" path="res://tile/highlight.png" id="3_j1xgt"]
-[ext_resource type="Script" path="res://script/Cursor.gd" id="5_2d0sc"]
 [ext_resource type="Script" path="res://script/terrain_renderer.gd" id="5_4cky6"]
 [ext_resource type="Texture2D" uid="uid://dflsj3xadflpn" path="res://sprite/jessie.png" id="5_6da1x"]
-[ext_resource type="Script" path="res://script/Player.gd" id="5_s21wj"]
 [ext_resource type="Script" path="res://script/plant_manager.gd" id="8_14ev8"]
+[ext_resource type="Script" path="res://script/cursor.gd" id="8_pxky3"]
 [ext_resource type="Script" path="res://script/turn_count.gd" id="8_sqolj"]
+[ext_resource type="Script" path="res://script/player.gd" id="9_g7qpm"]
 [ext_resource type="Script" path="res://script/score_count.gd" id="11_pb80n"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aifgd"]
@@ -60,6 +60,14 @@ font_color = Color(1, 1, 1, 0.152941)
 [node name="game_state_manager" type="Node2D" parent="."]
 position = Vector2(0, -5)
 script = ExtResource("1_2nue2")
+
+[node name="Camera2D" type="Camera2D" parent="game_state_manager"]
+position = Vector2(-16, -59)
+anchor_mode = 0
+zoom = Vector2(0.75, 0.75)
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
 
 [node name="UI" type="Control" parent="game_state_manager"]
 layout_direction = 1
@@ -119,7 +127,10 @@ text = "Load
 "
 clip_text = true
 
-[node name="TerrainRenderer" type="TileMap" parent="game_state_manager"]
+[node name="TerrainMap" type="Node2D" parent="game_state_manager"]
+script = ExtResource("3_bdwhm")
+
+[node name="TerrainRenderer" type="TileMap" parent="game_state_manager/TerrainMap"]
 tile_set = SubResource("TileSet_mkbp6")
 format = 2
 layer_0/name = "Grass"
@@ -139,34 +150,24 @@ layer_2/z_index = 50
 layer_2/tile_data = PackedInt32Array()
 script = ExtResource("5_4cky6")
 
-[node name="Cursor" type="Node2D" parent="game_state_manager/TerrainRenderer"]
-script = ExtResource("5_2d0sc")
+[node name="Plants" type="Node2D" parent="game_state_manager/TerrainMap"]
+script = ExtResource("8_14ev8")
 
-[node name="Player" type="Node2D" parent="game_state_manager/TerrainRenderer"]
+[node name="Cursor" type="Node2D" parent="game_state_manager"]
+script = ExtResource("8_pxky3")
+
+[node name="Player" type="Node2D" parent="game_state_manager"]
 position = Vector2(120, 120)
-script = ExtResource("5_s21wj")
+script = ExtResource("9_g7qpm")
 
-[node name="Sprite2D" type="Sprite2D" parent="game_state_manager/TerrainRenderer/Player"]
+[node name="Sprite2D" type="Sprite2D" parent="game_state_manager/Player"]
 position = Vector2(0, -1)
 texture = SubResource("AtlasTexture_71hdk")
 
-[node name="Plants" type="Node2D" parent="game_state_manager/TerrainRenderer"]
-script = ExtResource("8_14ev8")
+[node name="Labels" type="Node2D" parent="game_state_manager"]
+position = Vector2(0, 5)
 
-[node name="TerrainMap" type="Node2D" parent="game_state_manager"]
-script = ExtResource("3_bdwhm")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-16, -64)
-anchor_mode = 0
-zoom = Vector2(0.75, 0.75)
-position_smoothing_enabled = true
-drag_horizontal_enabled = true
-drag_vertical_enabled = true
-
-[node name="Labels" type="Node2D" parent="."]
-
-[node name="TurnCount" type="Label" parent="Labels"]
+[node name="TurnCount" type="Label" parent="game_state_manager/Labels"]
 z_index = 30
 texture_filter = 1
 offset_left = 6.0
@@ -177,7 +178,7 @@ text = "Turn #:"
 label_settings = SubResource("LabelSettings_3gkfw")
 script = ExtResource("8_sqolj")
 
-[node name="Controls" type="Label" parent="Labels"]
+[node name="Controls" type="Label" parent="game_state_manager/Labels"]
 offset_left = 6.0
 offset_top = 253.0
 offset_right = 240.0
@@ -185,7 +186,7 @@ offset_bottom = 292.0
 text = "Z: Move, X: Plant, C: Harvest"
 label_settings = SubResource("LabelSettings_nhnr5")
 
-[node name="ScoreCount" type="Label" parent="Labels"]
+[node name="ScoreCount" type="Label" parent="game_state_manager/Labels"]
 z_index = 30
 texture_filter = 1
 offset_left = 171.0
@@ -196,6 +197,4 @@ text = "Score:"
 label_settings = SubResource("LabelSettings_3gkfw")
 script = ExtResource("11_pb80n")
 
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager" method="game_state_to_array"]
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainRenderer" method="update_grass"]
-[connection signal="next_turn_signal" from="Labels/TurnCount" to="game_state_manager/TerrainRenderer/Plants" method="update_plants"]
+[connection signal="next_turn_signal" from="game_state_manager/Labels/TurnCount" to="game_state_manager/TerrainMap/Plants" method="update_plants"]

@@ -1,4 +1,4 @@
-extends Node2D
+class_name PlantManager extends Node2D
 
 @onready var plant = preload("res://scene/Plant.tscn");
 @onready var terrain_map = $"../../TerrainMap";
@@ -14,7 +14,7 @@ signal harvested_plant;
 func plant_plant(pos):
 	if (is_plant_at_pos(pos)): return
 	var p = plant.instantiate();
-	p.global_position = terrain_map.map_to_local(pos);
+	p.global_position = terrain_map.grid_to_pixel(pos);
 	plantDict[pos] = p;
 	add_child(p);
 	

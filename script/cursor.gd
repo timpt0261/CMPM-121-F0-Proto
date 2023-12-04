@@ -1,6 +1,6 @@
-extends Node2D
+class_name Cursor extends Node2D
 
-@onready var terrain_renderer = $"../../TerrainRenderer"
+@onready var terrain_renderer = $"../TerrainMap/TerrainRenderer"
 @onready var player = $"../Player"
 var mapFromMouse = Vector2i(0,0);
 

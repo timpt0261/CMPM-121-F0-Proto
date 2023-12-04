@@ -1,6 +1,6 @@
-extends Label
+class_name ScoreCount extends Label
 
-@onready var plant_manager = $"../../game_state_manager/TerrainRenderer/Plants";
+@onready var plant_manager = $"../../TerrainMap/Plants";
 
 func _ready():
 	# Connect to the signal emitted when a flower is harvested
