@@ -2,7 +2,6 @@ extends Node2D
 class_name GameStateManager
 
 @onready var terrain_map = $TerrainMap;
-@onready var plant_manager = $"TerrainMap/Plants";
 @onready var player = $Player;
 @onready var turn_count = $"Labels/TurnCount";
 @onready var score_count = $"Labels/ScoreCount";
@@ -21,9 +20,8 @@ func game_state_to_array():
 	#player_pos first 12 bytes
 	var player_pos = player.position;
 	var turn_number = turn_count.turn_number;
-	var score_number = plant_manager.get_plant_harvested_amount();
+	var score_number = score_count.score();
 	var terrain_dict = terrain_map.terrain_dict
-	var plant_dict = plant_manager.plantDict
 	game_state_byte_array = GameStateArray.new(MASTER_GRID_SIZE)
 	
 	game_state_byte_array.push(player_pos)
@@ -40,10 +38,10 @@ func game_state_to_array():
 			var sunlight = c.get_sunlight()
 			var growth = -1;
 			var plant_type_id = -1
-			if plant_dict.has(pos):
-				var p = plant_dict[pos]
-				growth = p.growth
-				plant_type_id = p.plant_type_id
+#			if plant_dict.has(pos):
+#				var p = plant_dict[pos]
+#				growth = p.growth
+#				plant_type_id = p.plant_type_id
 			game_state_byte_array.push(hydration)
 			game_state_byte_array.push(sunlight)
 			game_state_byte_array.push(plant_type_id)
@@ -93,8 +91,8 @@ func update_game_state():
 			g.set_sunlight(game_state_byte_array.get_sunlight(pos))
 
 			var plant_id = game_state_byte_array.get_plant_id(pos)
-			if plant_id >= 0:
-				plant_manager.plant_plant(pos, plant_id, game_state_byte_array.get_growth(pos))
+#			if plant_id >= 0:
+#				plant_manager.plant_plant(pos, plant_id, game_state_byte_array.get_growth(pos))
 
 	# Additional game state updates based on the loaded data
 	turn_count.text = str(game_state_byte_array.get_turn_count())

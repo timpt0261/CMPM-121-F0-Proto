@@ -33,15 +33,10 @@ func set_new_cursor_location():
 	if (mapFromMouse != newPos):
 		terrain_renderer.erase_cell(terrain_renderer.layers_IDs.CURSOR, mapFromMouse);
 		mapFromMouse = newPos;
-	terrain_renderer.set_cell(2, mapFromMouse, 2, Vector2i(0,0));
+		terrain_renderer.set_cell(2, mapFromMouse, 2, Vector2i(0,0));
 
 func do_nothing():
 	pass
-
-func selecting():
-	var map_from_mouse = terrain_renderer.local_to_map(get_global_mouse_position());
-	if (map_from_mouse == terrain_renderer.local_to_map(player.global_position)):
-		current_command = move_player_command;
 		
 func movePlayer():
 	player.start_path();

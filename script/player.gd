@@ -3,7 +3,6 @@ var current_id_path: Array[Vector2i];
 
 @onready var terrain_map = $"../TerrainMap";
 @onready var turn_count = $"../Labels/TurnCount";
-@onready var plant_manager = $"../TerrainMap/Plants";
 var a_star: AStarWrapper = AStarWrapper.new();
 
 var target_position: Vector2
@@ -47,13 +46,13 @@ func move_from_path():
 func try_plant_plant(planting_pos: Vector2):
 	var planting_map_pos: Vector2i = terrain_map.pixel_to_grid(planting_pos);
 	if !is_moving && get_distance_squared(planting_map_pos, get_player_map_pos()) == 1:
-		plant_manager.plant_plant(planting_map_pos);
-		turn_count.next_turn();
+		if terrain_map.plant_at(planting_map_pos, 0):
+			turn_count.next_turn();
 
 func try_harvest_plant(harvest_pos: Vector2):
 	var harvest_map_pos: Vector2i = terrain_map.pixel_to_grid(harvest_pos);
 	if !is_moving && get_distance_squared(harvest_map_pos, get_player_map_pos()) == 1:
-		if(plant_manager.harvest_plant(harvest_map_pos)):
+		if(terrain_map.harvest_at(harvest_map_pos)):
 			turn_count.next_turn();
 		
 func get_player_map_pos():
