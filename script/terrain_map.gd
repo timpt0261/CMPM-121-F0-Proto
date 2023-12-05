@@ -1,62 +1,65 @@
-class_name TerrainMap extends TileMap
+class_name TerrainMap extends Node2D
 
-@onready var grass = preload("res://script/Grass.gd");
-@onready var plant_manager = $"Plants"
+signal terrain_updated
+signal increment_score
+
+@onready var terrain_renderer  = $"TerrainRenderer"
 
 const MASTER_GRID_SIZE = 16;
-var terrain_dict = {};
 
-enum layers_IDs {
-	GRASS = 0,
-	HIGHLIGHT = 1,
-	CURSOR = 2,
-}
+var farm_grid: FarmGrid
 
 func _ready():
-	for x in MASTER_GRID_SIZE:
-		for y in MASTER_GRID_SIZE:
-			init_grass(x,y);
+	($"../Labels/TurnCount").next_turn_signal.connect(update_grid.bind())
+	farm_grid = FarmGrid.new(MASTER_GRID_SIZE, MASTER_GRID_SIZE)
+	terrain_updated.emit()
 
-func init_grass(x: int, y: int):
-	var g = Grass.new(x,y);
-	set_cell(layers_IDs.GRASS, Vector2(x,y), layers_IDs.GRASS, Vector2i(g.tile_type,0));	
-	if (g.sunny):
-		set_cell(layers_IDs.HIGHLIGHT, Vector2(x,y), layers_IDs.HIGHLIGHT, Vector2i(0,0));
-	terrain_dict[Vector2i(x,y)] = g;
-	bind_arguments(g);
+#+------------------------------------------------------------------------------+
+#|                              Terrain Management                              |
+#+------------------------------------------------------------------------------+
+func update_grid():
+	for cell in farm_grid:
+		cell.update_properties(get_adjacent_plant_ids(cell.position))
+		farm_grid.encode_cell(cell)
+	terrain_updated.emit()
 	
-func get_grass(x,y):
-	var key = Vector2i(x,y);
-	if (terrain_dict.has(key)):
-		return terrain_dict[key];
+func get_grass(x,y) -> Cell:
+	if x < 0 || x >= MASTER_GRID_SIZE || y < 0 || y >= MASTER_GRID_SIZE:
+		return null
+	else:
+		return farm_grid.decode_cell(Vector2i(x, y));
 
-func update_grass():
-	for key in terrain_dict:
-		var grass_instance = terrain_dict[key];
-		grass_instance.randomize_tile_properties();
+#+------------------------------------------------------------------------------+
+#|                                    Plants                                    |
+#+------------------------------------------------------------------------------+
+func plant_at(plant_position: Vector2i, plant_type_id: int) -> bool:
+	var cell = farm_grid.decode_cell(plant_position);
+	if cell.plant_type_id >= 0:
+		return false
+	cell.set_plant(plant_type_id, 0, 0, farm_grid.plant_template_list[plant_type_id])
+	farm_grid.encode_cell(cell)
+	return true
 
-func draw_new_grass(g: Grass):
-	erase_cell(layers_IDs.GRASS, Vector2(g.x,g.y));
-	set_cell(layers_IDs.GRASS, Vector2(g.x,g.y), layers_IDs.GRASS, Vector2i(g.tile_type,0));
+func harvest_at(plant_position: Vector2i) -> bool:
+	var cell = farm_grid.decode_cell(plant_position);
+	if cell.plant_type_id < 0 || cell.plant_visual_phase < 2:
+		return false
+	increment_score.emit(cell.POINTS)
+	cell.clear_plant()
+	farm_grid.encode_cell(cell)
+	return true
+
+func get_adjacent_plant_ids(plant_position: Vector2i) -> Array:
+	var adjacent_plants = []
+	for cell in farm_grid.get_adjacent_cells(plant_position):
+		adjacent_plants.append(cell.plant_type_id)
+	return adjacent_plants;
+
+#+------------------------------------------------------------------------------+
+#|                                  UTILITIES                                   |
+#+------------------------------------------------------------------------------+
+func pixel_to_grid(pixel_position: Vector2i) -> Vector2i:
+	return terrain_renderer.pixel_to_grid(pixel_position)
 	
-func erase_sun(g: Grass):
-	erase_cell(layers_IDs.HIGHLIGHT, Vector2(g.x,g.y));
-
-func draw_sun(g: Grass):
-	set_cell(layers_IDs.HIGHLIGHT, Vector2(g.x,g.y), layers_IDs.HIGHLIGHT, Vector2i(0,0));
-	
-# TODO: Parametrize this better -- grasses should probably have a const instance of their coordinates
-# Also: I bind the arguments here, but I need to still include arguments 
-# when i emit from a Grass object. wtf?
-
-func bind_arguments(g: Grass):
-	var draw_grass_call: Callable = Callable(self, "draw_new_grass");
-	draw_grass_call.bind(g);
-	var draw_sun_call: Callable = Callable(self, "draw_sun");
-	draw_sun_call.bind(g);
-	var erase_sun_call: Callable = Callable(self, "erase_sun");
-	erase_sun_call.bind(g);
-	
-	g.connect("grass_changed", draw_grass_call);
-	g.connect("sun_given", draw_sun_call);
-	g.connect("sun_taken", erase_sun_call);
+func grid_to_pixel(pixel_position: Vector2i) -> Vector2i:
+	return terrain_renderer.map_to_local(pixel_position)
