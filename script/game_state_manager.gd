@@ -24,6 +24,10 @@ var is_playing: bool = false;
 
 func _ready():
 	create_snapshot()
+	save.pressed.connect(self.do_save());
+	load.pressed.connect(self.do_load());
+	undo.pressed.connect(self.do_undo());
+	redo.pressed.connect(self.do_redo());
 	
 	
 func game_state_to_array():
