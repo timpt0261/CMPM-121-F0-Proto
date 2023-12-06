@@ -59,7 +59,7 @@ At the beginning of the game, all grass tiles are initialized with a certain wat
 A new level of sun (also between 1 and 100) is generated each turn, with a fraction of its value subtracting from the water level.
 Finally, each turn, the water level in a tile increases and decreases naturally on its own.
 
-### [F0.e] Each plant on the grid has a type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+### [F0.e] Each plant on the grid has a type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).https://github.com/timpt0261/CMPM-121-Final/blob/master/README.md
 There are zucchinis, strawberries, and daisies. Each has three stages, where the third stage is when they can be harvested for points. Before that, they do not count for harvests, and after that, they die. Their phases are tracked by an internal age that updates based on sun and water levels every turn.
 
 Plant growth stages are tracked differently from how many turns they have been alive. After they have been alive for a certain number of turns, they die, regardless of their growth stage.
@@ -72,7 +72,7 @@ The scenario is completed once the player has harvested 5 plants. Again, the poi
 
 ### [F1.a] The important state of each cell of your game’s grid must be backed by a single contiguous byte array in AoS or SoA format. Your team must statically allocate memory usage for the whole grid.
 To store and retreive our sunlight, water, plant, and player data we use an AoS byte array. We convert our data to bytes when we want to store and decode when we want to retreive.
-![F1.a data structure diagram]("./Screenshot from 2023-12-06 14-37-07.png")
+![F1.a data structure diagram](./Screenshot_from_2023-12-06_14-37-07.png)
 
 ### [F1.b] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
 We pack the entire game state into its own byte array and store that into a list of game state arrays after each turn. This list can be traversed up and down to acheive undo and redue. This functionality persists throughout multiple game sessions.
