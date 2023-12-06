@@ -1,8 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://cdvrt3alfjcqp"]
+[gd_scene load_steps=16 format=3 uid="uid://cdvrt3alfjcqp"]
 
 [ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_rx26m"]
 [ext_resource type="Script" path="res://script/terrain_map.gd" id="3_bdwhm"]
-[ext_resource type="Texture2D" uid="uid://h3pwbiwgoyw" path="res://tile/selected.png" id="3_fq6s7"]
 [ext_resource type="Texture2D" uid="uid://dcqniyr0oya1k" path="res://tile/highlight.png" id="3_j1xgt"]
 [ext_resource type="Script" path="res://script/terrain_renderer.gd" id="5_4cky6"]
 [ext_resource type="Texture2D" uid="uid://dflsj3xadflpn" path="res://sprite/jessie.png" id="5_6da1x"]
@@ -32,16 +31,11 @@ texture = ExtResource("3_j1xgt")
 0:0/0 = 0
 0:0/0/custom_data_0 = true
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8iwqg"]
-texture = ExtResource("3_fq6s7")
-0:0/0 = 0
-
 [sub_resource type="TileSet" id="TileSet_mkbp6"]
 custom_data_layer_0/name = "walkable"
 custom_data_layer_0/type = 1
 sources/0 = SubResource("TileSetAtlasSource_aifgd")
 sources/1 = SubResource("TileSetAtlasSource_og111")
-sources/2 = SubResource("TileSetAtlasSource_8iwqg")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_71hdk"]
 atlas = ExtResource("5_6da1x")
@@ -89,10 +83,10 @@ anchor_left = 0.126263
 anchor_top = -0.762767
 anchor_right = 1.95751
 anchor_bottom = 1.0742
-offset_left = 218.566
-offset_top = 320.392
-offset_right = -336.383
-offset_bottom = -279.525
+offset_left = 226.566
+offset_top = 338.392
+offset_right = -338.383
+offset_bottom = -261.525
 grow_horizontal = 2
 grow_vertical = 2
 text = "Save"
@@ -106,9 +100,9 @@ anchor_left = 0.126263
 anchor_top = -0.762767
 anchor_right = 1.95751
 anchor_bottom = 1.0742
-offset_left = 218.566
+offset_left = 226.566
 offset_top = 390.392
-offset_right = -336.383
+offset_right = -338.383
 offset_bottom = -209.525
 grow_horizontal = 2
 grow_vertical = 2
@@ -123,10 +117,10 @@ anchor_left = 0.126263
 anchor_top = -0.762767
 anchor_right = 1.95751
 anchor_bottom = 1.0742
-offset_left = 230.015
-offset_top = 363.863
-offset_right = -238.89
-offset_bottom = -124.999
+offset_left = 226.566
+offset_top = 450.392
+offset_right = -338.383
+offset_bottom = -149.525
 grow_horizontal = 2
 grow_vertical = 2
 text = "Undo"
@@ -140,17 +134,17 @@ anchor_left = 0.126263
 anchor_top = -0.762767
 anchor_right = 1.95751
 anchor_bottom = 1.0742
-offset_left = 232.088
-offset_top = 403.621
-offset_right = -241.817
-offset_bottom = -85.2406
+offset_left = 226.566
+offset_top = 498.392
+offset_right = -338.383
+offset_bottom = -101.525
 grow_horizontal = 2
 grow_vertical = 2
 text = "Redo"
 clip_text = true
 
 [node name="TerrainMap" type="Node2D" parent="game_state_manager"]
-position = Vector2(0, 31)
+position = Vector2(10, 44)
 script = ExtResource("3_bdwhm")
 
 [node name="TerrainRenderer" type="TileMap" parent="game_state_manager/TerrainMap"]
@@ -183,24 +177,25 @@ script = ExtResource("9_g7qpm")
 [node name="Sprite2D" type="Sprite2D" parent="game_state_manager/Player"]
 position = Vector2(0, -1)
 texture = SubResource("AtlasTexture_71hdk")
+centered = false
 
 [node name="Labels" type="Node2D" parent="game_state_manager"]
 
 [node name="Controls" type="Label" parent="game_state_manager/Labels"]
-offset_left = 6.0
-offset_top = 297.0
-offset_right = 240.0
-offset_bottom = 336.0
+offset_top = 300.0
+offset_right = 344.0
+offset_bottom = 344.0
 text = "Z: Move, X: Plant, C: Harvest"
 label_settings = SubResource("LabelSettings_nhnr5")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ScoreCount" type="Label" parent="game_state_manager/Labels"]
 z_index = 5
 texture_filter = 1
-offset_left = 158.0
-offset_top = 4.0
-offset_right = 212.0
-offset_bottom = 30.0
+offset_left = 150.0
+offset_right = 246.0
+offset_bottom = 44.0
 text = "Score:"
 label_settings = SubResource("LabelSettings_3gkfw")
 vertical_alignment = 1
@@ -209,10 +204,9 @@ script = ExtResource("11_pb80n")
 [node name="TurnCount" type="Label" parent="game_state_manager/Labels"]
 z_index = 5
 texture_filter = 1
-offset_left = 16.0
-offset_top = 5.0
-offset_right = 70.0
-offset_bottom = 31.0
+offset_left = 10.0
+offset_right = 106.0
+offset_bottom = 44.0
 text = "Turn#:
 "
 label_settings = SubResource("LabelSettings_3gkfw")

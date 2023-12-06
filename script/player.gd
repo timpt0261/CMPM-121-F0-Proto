@@ -1,29 +1,32 @@
 class_name Player extends Node2D
-var current_id_path: Array[Vector2i];
 
 @onready var terrain_map = $"../TerrainMap";
 @onready var turn_count = $"../Labels/TurnCount";
-var a_star: AStarWrapper = AStarWrapper.new();
 
+const PLAYER_START = Vector2i(7, 8)
+
+var a_star: AStarWrapper;
+var current_id_path: Array[Vector2i];
 var target_position: Vector2
 var is_moving: bool
 
 @export var move_speed = 2;
 @export var max_move_range = 7;
-		
+
+func _ready():
+	position = terrain_map.grid_to_pixel(PLAYER_START)
+	a_star = AStarWrapper.new()
+	current_id_path = [];
+
 func _physics_process(_delta):
 	move_from_path();
 
-func start_path():
+func move_to(destination: Vector2i):
 	if (is_moving): return;
-		
-	var map_from_mouse = terrain_map.pixel_to_grid(get_global_mouse_position());
+	
 	var id_path: Array[Vector2i];
 	
-	if (is_moving): id_path = a_star.get_id_path(terrain_map.pixel_to_grid(target_position), map_from_mouse);
-	else: id_path = a_star.get_id_path(get_player_map_pos(), map_from_mouse).slice(1);
-	
-	if (!id_path.is_empty() && id_path.size() <= max_move_range): current_id_path = id_path;
+	current_id_path = a_star.get_id_path(get_player_map_pos(), destination).slice(1);
 
 func move_from_path():
 	if current_id_path.is_empty(): return;
@@ -51,7 +54,7 @@ func try_plant_plant(planting_pos: Vector2):
 
 func try_harvest_plant(harvest_pos: Vector2):
 	var harvest_map_pos: Vector2i = terrain_map.pixel_to_grid(harvest_pos);
-	if !is_moving && get_distance_squared(harvest_map_pos, get_player_map_pos()) == 1:
+	if !is_moving && get_distance_squared(harvest_map_pos, get_player_map_pos()) <= 1:
 		if(terrain_map.harvest_at(harvest_map_pos)):
 			turn_count.next_turn();
 		

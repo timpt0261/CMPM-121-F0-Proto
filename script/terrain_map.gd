@@ -62,4 +62,7 @@ func pixel_to_grid(pixel_position: Vector2i) -> Vector2i:
 	return terrain_renderer.pixel_to_grid(pixel_position)
 	
 func grid_to_pixel(pixel_position: Vector2i) -> Vector2i:
-	return terrain_renderer.map_to_local(pixel_position)
+	return terrain_renderer.grid_to_pixel(pixel_position)
+
+func snap_to_grid(pixel_position: Vector2i) -> Vector2i:
+	return terrain_renderer.snap_to_grid(pixel_position)

@@ -8,6 +8,7 @@ enum layers_IDs {
 	CURSOR = 2,
 }
 
+const CELL_PIXEL_SIZE = 16;
 const PLANT_SPRITES_SIZE = 16;
 
 var plant_sprite_dict: Dictionary
@@ -58,12 +59,18 @@ func new_plant_sprite(cell: Cell) -> Sprite2D:
 	sprite.position = map_to_local(cell.position)
 	add_child(sprite)
 	return sprite
-	
+
 func get_relative_pixel_position(global_pixel_position: Vector2i) -> Vector2i:
-	return global_pixel_position - (position as Vector2i)
-	
+	return global_pixel_position - (global_position as Vector2i)
+
 func pixel_to_grid(pixel_position: Vector2i) -> Vector2i:
-	return get_relative_pixel_position(pixel_position) / PLANT_SPRITES_SIZE
+	return get_relative_pixel_position(pixel_position) / CELL_PIXEL_SIZE
+
+func grid_to_pixel(grid_position: Vector2i) -> Vector2i:
+	return grid_position * CELL_PIXEL_SIZE + (global_position as Vector2i)
+
+func snap_to_grid(pixel_position: Vector2i) -> Vector2i:
+	return grid_to_pixel(pixel_to_grid(pixel_position))
 
 func pixel_in_bounds(pixel_pos: Vector2i) -> bool:
 	var pixel_width = terrain_map.farm_grid.width * PLANT_SPRITES_SIZE
