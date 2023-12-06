@@ -36,7 +36,7 @@ var saves_list: PackedStringArray
 
 func _ready():
 	turn_count.new_turn_signal.connect(new_turn.bind())
-	save.pressed.connect(do_save.bind(get_new_save_name(SAVE_PREFIX)));
+	save.pressed.connect(manual_save.bind());
 	load.pressed.connect(do_load.bind());
 	save_scroll_up.pressed.connect(save_scroll.bind(1))
 	save_scroll_down.pressed.connect(save_scroll.bind(-1))
@@ -107,6 +107,9 @@ func _physics_process(delta):
 	if(is_playing):
 		auto_save()
 
+func manual_save():
+	do_save(get_new_save_name(SAVE_PREFIX))
+
 func auto_save():
 	var time_passed = Time.get_unix_time_from_system() - autosave_start;
 	if(time_passed > (auto_save_length * 60)):
@@ -155,6 +158,8 @@ func set_save_to_load(index: int):
 
 func refresh_saves_list():
 	saves_list = DirAccess.get_files_at(SAVE_DIRECTORY)
+	if save_to_load_index < 0:
+		save_to_load_index = 0
 	if(save_to_load_index >= saves_list.size()):
 		set_save_to_load(saves_list.size()-1)
 	set_save_to_load(save_to_load_index)
