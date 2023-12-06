@@ -72,6 +72,7 @@ The scenario is completed once the player has harvested 5 plants. Again, the poi
 
 ### [F1.a] The important state of each cell of your game’s grid must be backed by a single contiguous byte array in AoS or SoA format. Your team must statically allocate memory usage for the whole grid.
 To store and retreive our sunlight, water, plant, and player data we use an AoS byte array. We convert our data to bytes when we want to store and decode when we want to retreive.
+![F1.a data structure diagram]("./Screenshot from 2023-12-06 14-37-07.png")
 
 ### [F1.b] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
 We pack the entire game state into its own byte array and store that into a list of game state arrays after each turn. This list can be traversed up and down to acheive undo and redue. This functionality persists throughout multiple game sessions.
