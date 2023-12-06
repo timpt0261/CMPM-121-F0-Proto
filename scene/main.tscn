@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://cdvrt3alfjcqp"]
+[gd_scene load_steps=17 format=3 uid="uid://cdvrt3alfjcqp"]
 
 [ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_rx26m"]
+[ext_resource type="Script" path="res://script/game_state_manager.gd" id="1_xxoe3"]
 [ext_resource type="Script" path="res://script/terrain_map.gd" id="3_bdwhm"]
 [ext_resource type="Texture2D" uid="uid://dcqniyr0oya1k" path="res://tile/highlight.png" id="3_j1xgt"]
 [ext_resource type="Script" path="res://script/terrain_renderer.gd" id="5_4cky6"]
@@ -50,6 +51,7 @@ font_color = Color(1, 1, 1, 0.372549)
 [node name="Main" type="Node2D"]
 
 [node name="game_state_manager" type="Node2D" parent="."]
+script = ExtResource("1_xxoe3")
 
 [node name="Camera2D" type="Camera2D" parent="game_state_manager"]
 anchor_mode = 0

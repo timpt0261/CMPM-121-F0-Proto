@@ -22,18 +22,21 @@ const iter_increment = 1;
 #+------------------------------------------------------------------------------+
 #|                                Initialization                                |
 #+------------------------------------------------------------------------------+
-func _init(width: int, height: int):
+func _init(width: int, height: int, byte_array = null):
 	self.width = width
 	self.height = height
-	byte_array = PackedByteArray()
 	
-	byte_array.resize(width * height * CELL_PROPERTIES.size())
 	iter_current = iter_start;
 	iter_end = width*height;
 	
 	plant_template_list = get_plant_list("res://data/plants.json");
 	
-	generate_initial_cells()
+	if byte_array == null:
+		self.byte_array = PackedByteArray()
+		self.byte_array.resize(width * height * CELL_PROPERTIES.size())
+		generate_initial_cells()
+	else:
+		self.byte_array = byte_array
 	
 func generate_initial_cells():
 	for y in height:

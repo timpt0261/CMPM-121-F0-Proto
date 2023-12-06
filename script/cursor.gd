@@ -31,14 +31,15 @@ func set_cursor_sprite():
 
 func _input(event):
 	update_cursor_location()
-	if(event.is_action_pressed("Move")):
-		current_command = move_player_command;
-	elif(event.is_action_pressed("Plant")):
-		current_command = plant_command;
-	elif(event.is_action_pressed("Harvest")):
-		current_command = harvest_command;
-	elif event.is_action_pressed("Select"):
-		current_command.call();
+	if on_grid:
+		if(event.is_action_pressed("Move")):
+			current_command = move_player_command;
+		elif(event.is_action_pressed("Plant")):
+			current_command = plant_command;
+		elif(event.is_action_pressed("Harvest")):
+			current_command = harvest_command;
+		elif event.is_action_pressed("Select"):
+			current_command.call();
 
 func update_cursor_location():
 	cursor_pixel_position = get_global_mouse_position()

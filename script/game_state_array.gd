@@ -1,64 +1,62 @@
 class_name GameStateArray
 
-const PLAYER_POSITION_INDEX = 0
-const TURN_COUNT_INDEX = 12
-const SCORE_INDEX = 20
-const CELLS_START = 28
-
-const SIZE_OF_VECTOR2I = 12;
-const SIZE_OF_INT = 8;
+enum DataIndices {
+	PLAYER_POSITION_X = 0,
+	PLAYER_POSITION_Y = 1,
+	TURN_COUNT = 2,
+	SCORE_COUNT = 3,
+	FARM_GRID_WIDTH = 4,
+	FARM_GRID_HEIGHT = 5
+}
 
 var byte_array: PackedByteArray
-var grid_side_length: int
 
-func _init(side_length):
+func _init():
 	byte_array = PackedByteArray()
-	grid_side_length = side_length
+	byte_array.resize(DataIndices.size())
+
+static func from_byte_array(byte_array: PackedByteArray) -> GameStateArray:
+	var game_state_array = GameStateArray.new()
+	game_state_array.byte_array = byte_array
+	return game_state_array
+
+func set_int_data(data_type: DataIndices, data: int):
+	byte_array.encode_s8(data_type, data);
+
+func set_player_position(player_position: Vector2i):
+	set_int_data(DataIndices.PLAYER_POSITION_X, player_position.x)
+	set_int_data(DataIndices.PLAYER_POSITION_Y, player_position.y)
+
+func set_turn_count(turn_count: int):
+	set_int_data(DataIndices.TURN_COUNT, turn_count)
+
+func set_score_count(score_count: int):
+	set_int_data(DataIndices.SCORE_COUNT, score_count)
 	
-func clear():
-	byte_array.clear()
-	
-func duplicate():
-	return byte_array.duplicate()
-	
-func set_byte_array(new_byte_array: PackedByteArray):
-	byte_array = new_byte_array
-	
-func as_byte_array() -> PackedByteArray:
-	return byte_array
-	
-func push(data):
-	var data_bytes = var_to_bytes(data)
-	byte_array.append_array(data_bytes)
-	
+func set_farm_grid(farm_grid: FarmGrid):
+	set_int_data(DataIndices.FARM_GRID_WIDTH, farm_grid.width)
+	set_int_data(DataIndices.FARM_GRID_HEIGHT, farm_grid.height)
+
+	byte_array = byte_array.slice(0, DataIndices.size())
+	byte_array.append_array(farm_grid.byte_array)
+
+
+func get_int_data(data_type: DataIndices) -> int:
+	return byte_array.decode_s8(data_type);
+
 func get_player_position() -> Vector2i:
-	var player_position_bytes = byte_array.slice(PLAYER_POSITION_INDEX, PLAYER_POSITION_INDEX + SIZE_OF_VECTOR2I)
-	return bytes_to_var(player_position_bytes) as Vector2i
-	
+	var x = get_int_data(DataIndices.PLAYER_POSITION_X)
+	var y = get_int_data(DataIndices.PLAYER_POSITION_Y)
+	return Vector2i(x, y)
+
 func get_turn_count() -> int:
-	var turn_count_bytes = byte_array.slice(TURN_COUNT_INDEX, TURN_COUNT_INDEX + SIZE_OF_INT)
-	return bytes_to_var(turn_count_bytes) as int
+	return get_int_data(DataIndices.TURN_COUNT)
+
+func get_score_count() -> int:
+	return get_int_data(DataIndices.SCORE_COUNT)
 	
-func get_score() -> int:
-	var score_bytes = byte_array.slice(SCORE_INDEX, SCORE_INDEX + SIZE_OF_INT)
-	return bytes_to_var(score_bytes) as int
-	
-func get_hydration(pos: Vector2i) -> int:
-	var index = pos.y * grid_side_length + pos.x + CELLS_START
-	var hydration_bytes = byte_array.slice(index, index + SIZE_OF_INT)
-	return bytes_to_var(hydration_bytes) as int
-	
-func get_sunlight(pos: Vector2i) -> int:
-	var index = pos.y * grid_side_length + pos.x + CELLS_START + SIZE_OF_INT
-	var sunlight_bytes = byte_array.slice(index, index + SIZE_OF_INT)
-	return bytes_to_var(sunlight_bytes) as int
-	
-func get_plant_id(pos: Vector2i) -> int:
-	var index = pos.y * grid_side_length + pos.x + CELLS_START + SIZE_OF_INT * 2
-	var plant_id_bytes = byte_array.slice(index, index + SIZE_OF_INT)
-	return bytes_to_var(plant_id_bytes) as int
-	
-func get_growth(pos: Vector2i) -> int:
-	var index = pos.y * grid_side_length + pos.x + CELLS_START + SIZE_OF_INT * 3
-	var growth_bytes = byte_array.slice(index, index + SIZE_OF_INT)
-	return bytes_to_var(growth_bytes) as int
+func get_farm_grid() -> FarmGrid:
+	var farm_grid_array = byte_array.slice(DataIndices.size())
+	var farm_grid_width = get_int_data(DataIndices.FARM_GRID_WIDTH)
+	var farm_grid_height = get_int_data(DataIndices.FARM_GRID_HEIGHT)
+	return FarmGrid.new(farm_grid_width, farm_grid_height, farm_grid_array)

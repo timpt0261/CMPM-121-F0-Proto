@@ -10,13 +10,17 @@ const MASTER_GRID_SIZE = 16;
 var farm_grid: FarmGrid
 
 func _ready():
-	($"../Labels/TurnCount").next_turn_signal.connect(update_grid.bind())
-	farm_grid = FarmGrid.new(MASTER_GRID_SIZE, MASTER_GRID_SIZE)
-	terrain_updated.emit()
+	($"../Labels/TurnCount").new_turn_signal.connect(update_grid.bind())
+	
+	set_farm_grid(FarmGrid.new(MASTER_GRID_SIZE, MASTER_GRID_SIZE))
 
 #+------------------------------------------------------------------------------+
 #|                              Terrain Management                              |
 #+------------------------------------------------------------------------------+
+func set_farm_grid(farm_grid: FarmGrid):
+	self.farm_grid = farm_grid
+	terrain_updated.emit()
+
 func update_grid():
 	for cell in farm_grid:
 		cell.update_properties(get_adjacent_plant_ids(cell.position))

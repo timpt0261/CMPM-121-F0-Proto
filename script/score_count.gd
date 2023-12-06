@@ -9,9 +9,12 @@ func _ready():
 	terrain_map.increment_score.connect(increment_score.bind());
 
 func increment_score(increment: int):
-	score += increment
-	text = "Score: " + str(score);
-	if score >= VICTORY_SCORE:
+	set_score(score + increment)
+
+func set_score(score: int):
+	self.score = score
+	text = "Score: " + str(self.score)
+	if self.score >= VICTORY_SCORE:
 		game_over()
 
 func game_over():

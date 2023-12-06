@@ -16,108 +16,62 @@ class_name GameStateManager
 var game_state_stacks: Array[GameStateArray] = [];
 var current_snapshot_index: int = -1;
 
-var game_state_byte_array: GameStateArray
+var game_state_array: GameStateArray
 
 var auto_save_length:int = 5;
-var autosave_start: int = 0; # 60 second in 1 min
+var autosave_start: int; # 60 second in 1 min
 var is_playing: bool = false;
 
 func _ready():
-	create_snapshot()
-	save.pressed.connect(self.do_save());
-	load.pressed.connect(self.do_load());
-	undo.pressed.connect(self.do_undo());
-	redo.pressed.connect(self.do_redo());
+	turn_count.new_turn_signal.connect(new_turn.bind())
+	save.pressed.connect(do_save.bind());
+	load.pressed.connect(do_load.bind());
+	undo.pressed.connect(do_undo.bind());
+	redo.pressed.connect(do_redo.bind());
+	autosave_start = 0
+	new_turn()
 	
+func new_turn():
+		game_state_to_array()
+		create_snapshot()
 	
 func game_state_to_array():
-	#player_pos first 12 bytes
-	var player_pos = player.position;
-	var turn_number = turn_count.turn_number;
-	var score_number = score_count.score();
-	var terrain_dict = terrain_map.terrain_dict
-	game_state_byte_array = GameStateArray.new(MASTER_GRID_SIZE)
-	
-	game_state_byte_array.push(player_pos)
-	game_state_byte_array.push(turn_count.turn_number)
-	game_state_byte_array.push(score_number)
-	
-	
-	#32 bytes per cell
-	for y in MASTER_GRID_SIZE:
-		for x in MASTER_GRID_SIZE:
-			var pos = Vector2i(x, y)
-			var c = terrain_dict[pos]
-			var hydration = c.get_wetness()
-			var sunlight = c.get_sunlight()
-			var growth = -1;
-			var plant_type_id = -1
-#			if plant_dict.has(pos):
-#				var p = plant_dict[pos]
-#				growth = p.growth
-#				plant_type_id = p.plant_type_id
-			game_state_byte_array.push(hydration)
-			game_state_byte_array.push(sunlight)
-			game_state_byte_array.push(plant_type_id)
-			game_state_byte_array.push(growth)
-
-
-#Turn Count
-#Score Count
-#Random seed (per turn?)
-#Tile info
-#Player Position
-#Inventory (what seeds you have)
-#Plants Growing, Plant Data
-#Turn Cell's entire state into piece of data
-
+	game_state_array = GameStateArray.new()
+	game_state_array.set_player_position(player.grid_position)
+	game_state_array.set_turn_count(turn_count.turn_number)
+	game_state_array.set_score_count(score_count.score)
+	game_state_array.set_farm_grid(terrain_map.farm_grid)
 
 func do_save():
-	create_snapshot()
 	game_state_to_array()
 	# Save the PackedByteArray to a file
-	var file = FileAccess.open("res://saved_data/game_save.dat", FileAccess.WRITE);
-	file.store_buffer(game_state_byte_array.as_byte_array())
+	var file = FileAccess.open("res://save_data/game_save.txt", FileAccess.WRITE);
+	file.store_buffer(game_state_array.byte_array)
 	file.close()
 
 func do_load():
 	# Read the PackedByteArray from the file
-	var file:FileAccess;
-	if file.file_exists("res://saved_data/game_save.dat"):
-		file.open("res://saved_data/game_save.dat", FileAccess.READ);
-		game_state_byte_array.set_byte_array(PackedByteArray(file.get_buffer(file.get_len())));
+	if FileAccess.file_exists("res://save_data/game_save.txt"):
+		var file = FileAccess.open("res://save_data/game_save.txt", FileAccess.READ);
+		game_state_array = GameStateArray.from_byte_array(PackedByteArray(file.get_buffer(file.get_length())));
 		file.close();
 		update_game_state()
 	else:
 		printerr("Save Not Found");
 		
 func create_snapshot():
-	var snapshot = game_state_byte_array.duplicate();
+	var snapshot = game_state_array;
 	game_state_stacks.append(snapshot);
 	current_snapshot_index = game_state_stacks.size() -1;
 	
 func update_game_state():
-	# Update the terrain, plants, player, and other game state elements
-	player.position = game_state_byte_array.get_player_position()
-	# based on the loaded cell state array
-	var MASTER_GRID_SIZE = terrain_map.MASTER_GRID_SIZE
-	for y in MASTER_GRID_SIZE:
-		for x in MASTER_GRID_SIZE:
-			var pos = Vector2i(x, y)
-			var g = terrain_map.terrain_dict[pos]
+	player.set_grid_position(game_state_array.get_player_position())
 
-			# Update terrain and plant information
-			g.set_wetness(game_state_byte_array.get_hydration(pos))
-			g.set_sunlight(game_state_byte_array.get_sunlight(pos))
+	turn_count.set_turn(game_state_array.get_turn_count())
+	score_count.set_score(game_state_array.get_score_count())
+	
+	terrain_map.set_farm_grid(game_state_array.get_farm_grid())
 
-			var plant_id = game_state_byte_array.get_plant_id(pos)
-#			if plant_id >= 0:
-#				plant_manager.plant_plant(pos, plant_id, game_state_byte_array.get_growth(pos))
-
-	# Additional game state updates based on the loaded data
-	turn_count.text = str(game_state_byte_array.get_turn_count())
-	score_count.text = str(game_state_byte_array.get_score())
-#
 func _physics_process(delta):
 	if(is_playing):
 		auto_save()
@@ -127,17 +81,16 @@ func auto_save():
 	if(time_passed > (auto_save_length * 60)):
 		do_save();
 		autosave_start = Time.get_unix_time_from_system();
-	
 
 func do_undo():
 	# Should change the the current byte array to last one in stack
-	if(current_snapshot_index > 0 ):
+	if current_snapshot_index > 0:
 		current_snapshot_index -= 1
-		game_state_byte_array = game_state_stacks[current_snapshot_index];
+		game_state_array = game_state_stacks[current_snapshot_index];
 		update_game_state();
 	
 func do_redo():
 	if current_snapshot_index < game_state_stacks.size() - 1:
 		current_snapshot_index += 1
-		game_state_byte_array = game_state_stacks[current_snapshot_index].duplicate()
+		game_state_array = game_state_stacks[current_snapshot_index]
 		update_game_state()

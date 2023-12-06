@@ -10,16 +10,23 @@ var current_id_path: Array[Vector2i];
 var target_position: Vector2
 var is_moving: bool
 
+var grid_position: Vector2i
+
 @export var move_speed = 2;
 @export var max_move_range = 7;
 
 func _ready():
-	position = terrain_map.grid_to_pixel(PLAYER_START)
+	grid_position = PLAYER_START
+	position = terrain_map.grid_to_pixel(grid_position)
 	a_star = AStarWrapper.new()
 	current_id_path = [];
 
 func _physics_process(_delta):
 	move_from_path();
+
+func set_grid_position(grid_position: Vector2i):
+	self.grid_position = grid_position
+	position = terrain_map.grid_to_pixel(self.grid_position)
 
 func move_to(destination: Vector2i):
 	if (is_moving): return;
@@ -44,6 +51,7 @@ func move_from_path():
 			target_position = terrain_map.grid_to_pixel(current_id_path.front());
 		else:
 			is_moving = false;
+			grid_position = terrain_map.pixel_to_grid(position)
 			turn_count.next_turn();
 			
 func try_plant_plant(planting_pos: Vector2):
