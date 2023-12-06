@@ -3,7 +3,7 @@ class_name ScoreCount extends Label
 @onready var terrain_map = $"../../TerrainMap";
 
 var score = 0
-const VICTORY_SCORE = 10
+const VICTORY_SCORE = 100
 
 func _ready():
 	terrain_map.increment_score.connect(increment_score.bind());

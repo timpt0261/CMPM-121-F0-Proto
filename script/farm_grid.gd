@@ -75,6 +75,9 @@ func get_adjacent_cells(cell_position: Vector2i) -> Array:
 			adjacent_cells.append(decode_cell(adjacent_pos))
 	return adjacent_cells;
 
+static func array_size_of(width: int, height: int):
+	return width * height * CELL_PROPERTIES.size()
+
 #+------------------------------------------------------------------------------+
 #|                       Byte Array encoding and decoding                       |
 #+------------------------------------------------------------------------------+

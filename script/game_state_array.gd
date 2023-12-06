@@ -20,6 +20,12 @@ static func from_byte_array(byte_array: PackedByteArray) -> GameStateArray:
 	game_state_array.byte_array = byte_array
 	return game_state_array
 
+func get_array_size() -> int:
+	return byte_array.size()
+
+static func array_size_of(width: int, height: int):
+	return DataIndices.size() + FarmGrid.array_size_of(width, height)
+
 func set_int_data(data_type: DataIndices, data: int):
 	byte_array.encode_s8(data_type, data);
 

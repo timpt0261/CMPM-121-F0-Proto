@@ -53,11 +53,15 @@ func move_from_path():
 			is_moving = false;
 			grid_position = terrain_map.pixel_to_grid(position)
 			turn_count.next_turn();
-			
+
+func get_random_plant_id() -> int:
+	var rnd = RandomNumberGenerator.new();
+	return rnd.randi_range(0, terrain_map.farm_grid.plant_template_list.size()-1)
+
 func try_plant_plant(planting_pos: Vector2):
 	var planting_map_pos: Vector2i = terrain_map.pixel_to_grid(planting_pos);
 	if !is_moving && get_distance_squared(planting_map_pos, get_player_map_pos()) == 1:
-		if terrain_map.plant_at(planting_map_pos, 0):
+		if terrain_map.plant_at(planting_map_pos, get_random_plant_id()):
 			turn_count.next_turn();
 
 func try_harvest_plant(harvest_pos: Vector2):
