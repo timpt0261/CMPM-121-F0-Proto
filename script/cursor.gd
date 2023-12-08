@@ -3,23 +3,25 @@ class_name Cursor extends Node2D
 @onready var terrain_renderer = $"../TerrainMap/TerrainRenderer"
 @onready var player = $"../Player"
 
-enum ACTIONS { PLAYER_MOVING, PLAYER_PLANTING };
+enum ACTIONS { PLAYER_MOVING, PLAYER_PLANTING }
 
 var cursor_pixel_position: Vector2i
 var cursor_grid_position: Vector2i
-var on_grid: bool;
+var on_grid: bool
 const OFF_GRID_POSITION = Vector2i.ONE * -1
 
-var move_player_command = Callable(movePlayer);
-var plant_command = Callable(plant_plant);
-var harvest_command = Callable(harvest_plant);
-var current_command: Callable;
+var move_player_command = Callable(movePlayer)
+var plant_command = Callable(plant_plant)
+var harvest_command = Callable(harvest_plant)
+var current_command: Callable
 
 var cursor_sprite: Sprite2D
 
+
 func _ready():
-	current_command = Callable(do_nothing);
+	current_command = Callable(do_nothing)
 	set_cursor_sprite()
+
 
 func set_cursor_sprite():
 	if cursor_sprite == null:
@@ -29,17 +31,19 @@ func set_cursor_sprite():
 		add_child(cursor_sprite)
 		cursor_sprite.hide()
 
+
 func _input(event):
 	update_cursor_location()
 	if on_grid:
-		if(event.is_action_pressed("Move")):
-			current_command = move_player_command;
-		elif(event.is_action_pressed("Plant")):
-			current_command = plant_command;
-		elif(event.is_action_pressed("Harvest")):
-			current_command = harvest_command;
+		if event.is_action_pressed("Move"):
+			current_command = move_player_command
+		elif event.is_action_pressed("Plant"):
+			current_command = plant_command
+		elif event.is_action_pressed("Harvest"):
+			current_command = harvest_command
 		elif event.is_action_pressed("Select"):
-			current_command.call();
+			current_command.call()
+
 
 func update_cursor_location():
 	cursor_pixel_position = get_global_mouse_position()
@@ -54,14 +58,18 @@ func update_cursor_location():
 		cursor_grid_position = OFF_GRID_POSITION
 		cursor_sprite.hide()
 
+
 func do_nothing():
 	pass
 
+
 func movePlayer():
-	player.move_to(cursor_grid_position);
+	player.move_to(cursor_grid_position)
+
 
 func plant_plant():
-	player.try_plant_plant(get_global_mouse_position());
+	player.try_plant_plant(get_global_mouse_position())
+
 
 func harvest_plant():
-	player.try_harvest_plant(get_global_mouse_position());
+	player.try_harvest_plant(get_global_mouse_position())

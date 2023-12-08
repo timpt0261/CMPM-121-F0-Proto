@@ -53,6 +53,11 @@ jobs:
      mkdir -p ./builds/win
      ./godot --headless --path ./ --export-release "Windows Desktop" ./builds/win/farm-sim.exe
     
+  - name: Export Android
+    run: |
+     mkdir -p ./builds/android
+     ./godot --headless --path ./ --export-release "Android" ./builds/android/cmpm-121-final.apk
+    
 
   - uses: actions/upload-artifact@v2
     with:
@@ -135,6 +140,9 @@ jobs:
     
     - name: Push Windows Desktop to Itch
       run: ./butler push ./builds/win mojius/farm-strategy:win --userversion-file ./VERSION/VERSION.txt
+    
+    - name: Push Android to Itch
+      run: ./butler push ./builds/android mojius/farm-strategy:android --userversion-file ./VERSION/VERSION.txt
     
 
  Cleanup:
