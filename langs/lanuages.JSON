@@ -1,0 +1,32 @@
+﻿{
+  "en": {
+    "language": "English",
+    "turn": "Turn",
+    "score": "Score",
+    "save": "Save",
+    "load": "Load",
+    "autosave": "AutoSave",
+    "undo": "Undo",
+    "redo": "Redo"
+  },
+  "es": {
+    "language": "Español",
+    "turn": "Turno",
+    "score": "Puntos",
+    "save": "Guardar",
+    "load": "Cargar",
+    "autosave": "AutoGuardado",
+    "undo": "Deshacer",
+    "redo": "Rehacer"
+  },
+  "yi": {
+    "language": "Yiddish",
+    "turn": "זוג",
+    "score": "פּונקט",
+    "save": "שפּעיך",
+    "load": "לאַדן",
+    "autosave": "אַווטאָסעיוו",
+    "undo": "אויסרעטן",
+    "redo": "רעטורן"
+  }
+}

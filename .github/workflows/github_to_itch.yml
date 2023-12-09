@@ -58,6 +58,11 @@ jobs:
      mkdir -p ./builds/android
      ./godot --headless --path ./ --export-release "Android" ./builds/android/cmpm-121-final.apk
     
+  - name: Export Web
+    run: |
+     mkdir -p ./builds/Web
+     ./godot --headless --path ./ --export-release "Web" ./builds/Web/cmpm-121-final.html
+    
 
   - uses: actions/upload-artifact@v2
     with:
@@ -137,12 +142,6 @@ jobs:
     
     - name: Login To Butler
       run: ./butler login
-    
-    - name: Push Windows Desktop to Itch
-      run: ./butler push ./builds/win mojius/farm-strategy:win --userversion-file ./VERSION/VERSION.txt
-    
-    - name: Push Android to Itch
-      run: ./butler push ./builds/android mojius/farm-strategy:android --userversion-file ./VERSION/VERSION.txt
     
 
  Cleanup:
