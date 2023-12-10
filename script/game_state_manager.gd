@@ -15,6 +15,7 @@ class_name GameStateManager
 @onready var save_scroll_down: Button = $"UI/save_scroll_down"
 @onready var undo: Button = $"UI/undo"
 @onready var redo: Button = $"UI/redo"
+@onready var language_options: OptionButton = $"UI/LanguageOptions"
 
 var game_state_stacks: Array[GameStateArray] = []
 var current_snapshot_index: int = -1
@@ -37,9 +38,11 @@ var saves_list: PackedStringArray
 
 func _ready():
 	turn_count.new_turn_signal.connect(new_turn.bind())
-	
 	bind_buttons();
-
+	
+	language_options.select(3);
+	set_language("res://langs/languages.json")
+	
 	save_to_load_index = 0
 	refresh_saves_list()
 	new_turn()
@@ -187,3 +190,24 @@ func bind_buttons():
 	save_scroll_down.pressed.connect(save_scroll.bind(-1))
 	undo.pressed.connect(do_undo.bind())
 	redo.pressed.connect(do_redo.bind())	
+	language_options.pressed.connect(set_language.bind())
+	
+	
+func init_language_options():
+	pass
+
+func set_language(file_path: String):
+
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	var lang_data = JSON.parse_string(file.get_as_text())
+	
+	var lang: Dictionary = lang_data[language_options.get_selected_id()];
+	save.text = lang.get("save");
+	load.text = lang.get("load");
+	score_count.text = lang.get("score");
+	turn_count.text = lang.get("turn");
+	undo.text = lang.get("undo");
+	redo.text = lang.get("redo");
+	
+	
+	

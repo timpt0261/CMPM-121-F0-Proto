@@ -192,6 +192,21 @@ grow_vertical = 2
 text = "Redo"
 clip_text = true
 
+[node name="LanguageOptions" type="OptionButton" parent="game_state_manager/UI"]
+z_index = 20
+layout_mode = 0
+offset_left = 6.0
+offset_top = 261.0
+offset_right = 61.0
+offset_bottom = 292.0
+item_count = 3
+popup/item_0/text = "E"
+popup/item_0/id = 0
+popup/item_1/text = "R"
+popup/item_1/id = 1
+popup/item_2/text = "G"
+popup/item_2/id = 2
+
 [node name="TerrainMap" type="Node2D" parent="game_state_manager"]
 position = Vector2(10, 44)
 script = ExtResource("3_bdwhm")
@@ -231,9 +246,11 @@ centered = false
 [node name="Labels" type="Node2D" parent="game_state_manager"]
 
 [node name="Controls" type="Label" parent="game_state_manager/Labels"]
-offset_top = 300.0
-offset_right = 344.0
-offset_bottom = 344.0
+visible = false
+offset_left = 1.0
+offset_top = 299.0
+offset_right = 345.0
+offset_bottom = 343.0
 text = "Z: Move, X: Plant, C: Harvest"
 label_settings = SubResource("LabelSettings_nhnr5")
 horizontal_alignment = 1
