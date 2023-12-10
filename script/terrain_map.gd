@@ -7,19 +7,18 @@ signal increment_score
 
 const MASTER_GRID_SIZE = 16
 
-var farm_grid: FarmGrid
-
+var farm_grid: FarmGridArray
 
 func _ready():
 	($"../Labels/TurnCount").new_turn_signal.connect(update_grid.bind())
 
-	set_farm_grid(FarmGrid.new(MASTER_GRID_SIZE, MASTER_GRID_SIZE))
+	set_farm_grid(FarmGridArray.new(MASTER_GRID_SIZE, MASTER_GRID_SIZE))
 
 
 #+------------------------------------------------------------------------------+
 #|                              Terrain Management                              |
 #+------------------------------------------------------------------------------+
-func set_farm_grid(farm_grid: FarmGrid):
+func set_farm_grid(farm_grid: FarmGridArray):
 	self.farm_grid = farm_grid
 	terrain_updated.emit()
 

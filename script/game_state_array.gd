@@ -28,7 +28,7 @@ func get_array_size() -> int:
 
 
 static func array_size_of(width: int, height: int):
-	return DataIndices.size() + FarmGrid.array_size_of(width, height)
+	return DataIndices.size() + FarmGridArray.array_size_of(width, height)
 
 
 func set_int_data(data_type: DataIndices, data: int):
@@ -48,7 +48,7 @@ func set_score_count(score_count: int):
 	set_int_data(DataIndices.SCORE_COUNT, score_count)
 
 
-func set_farm_grid(farm_grid: FarmGrid):
+func set_farm_grid(farm_grid: FarmGridArray):
 	set_int_data(DataIndices.FARM_GRID_WIDTH, farm_grid.width)
 	set_int_data(DataIndices.FARM_GRID_HEIGHT, farm_grid.height)
 
@@ -74,8 +74,8 @@ func get_score_count() -> int:
 	return get_int_data(DataIndices.SCORE_COUNT)
 
 
-func get_farm_grid() -> FarmGrid:
+func get_farm_grid() -> FarmGridArray:
 	var farm_grid_array = byte_array.slice(DataIndices.size())
 	var farm_grid_width = get_int_data(DataIndices.FARM_GRID_WIDTH)
 	var farm_grid_height = get_int_data(DataIndices.FARM_GRID_HEIGHT)
-	return FarmGrid.new(farm_grid_width, farm_grid_height, farm_grid_array)
+	return FarmGridArray.new(farm_grid_width, farm_grid_height, farm_grid_array)

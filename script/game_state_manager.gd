@@ -37,12 +37,9 @@ var saves_list: PackedStringArray
 
 func _ready():
 	turn_count.new_turn_signal.connect(new_turn.bind())
-	save.pressed.connect(manual_save.bind())
-	load.pressed.connect(do_load.bind())
-	save_scroll_up.pressed.connect(save_scroll.bind(1))
-	save_scroll_down.pressed.connect(save_scroll.bind(-1))
-	undo.pressed.connect(do_undo.bind())
-	redo.pressed.connect(do_redo.bind())
+	
+	bind_buttons();
+
 	save_to_load_index = 0
 	refresh_saves_list()
 	new_turn()
@@ -182,3 +179,11 @@ func refresh_saves_list():
 	if save_to_load_index >= saves_list.size():
 		set_save_to_load(saves_list.size() - 1)
 	set_save_to_load(save_to_load_index)
+	
+func bind_buttons():
+	save.pressed.connect(manual_save.bind())
+	load.pressed.connect(do_load.bind())
+	save_scroll_up.pressed.connect(save_scroll.bind(1))
+	save_scroll_down.pressed.connect(save_scroll.bind(-1))
+	undo.pressed.connect(do_undo.bind())
+	redo.pressed.connect(do_redo.bind())	

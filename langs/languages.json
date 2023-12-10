@@ -15,12 +15,12 @@
     "score": "Puntos",
     "save": "Guardar",
     "load": "Cargar",
-    "autosave": "AutoGuardado",
+    "autosave": "Autoguardado",
     "undo": "Deshacer",
     "redo": "Rehacer"
   },
   "yi": {
-    "language": "Yiddish",
+    "language": "יידיש",
     "turn": "זוג",
     "score": "פּונקט",
     "save": "שפּעיך",
@@ -28,5 +28,15 @@
     "autosave": "אַווטאָסעיוו",
     "undo": "אויסרעטן",
     "redo": "רעטורן"
+  },
+    "jp": {
+    "language": "日本語",
+    "turn": "番",
+    "score": "点",
+    "save": "セーブ",
+    "load": "ロード",
+    "autosave": "オートセーブ",
+    "undo": "元に戻す",
+    "redo": "やり直し"
   }
 }

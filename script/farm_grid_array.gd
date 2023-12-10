@@ -1,4 +1,4 @@
-class_name FarmGrid
+class_name FarmGridArray
 
 enum CELL_PROPERTIES {
 	HYDRATION = 0, SUNLIGHT = 1, PLANT_TYPE_ID = 2, PLANT_GROWTH = 3, PLANT_TURNS_ALIVE = 4
