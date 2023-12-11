@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cdvrt3alfjcqp"]
+[gd_scene load_steps=20 format=3 uid="uid://cdvrt3alfjcqp"]
 
 [ext_resource type="Texture2D" uid="uid://cqpnkcrufhdty" path="res://tile/grass.png" id="1_rx26m"]
 [ext_resource type="Script" path="res://script/game_state_manager.gd" id="1_xxoe3"]
@@ -9,7 +9,10 @@
 [ext_resource type="Script" path="res://script/cursor.gd" id="8_pxky3"]
 [ext_resource type="Script" path="res://script/turn_count.gd" id="8_sqolj"]
 [ext_resource type="Script" path="res://script/player.gd" id="9_g7qpm"]
+[ext_resource type="Texture2D" uid="uid://by25b82fnr8uq" path="res://sprite/buttons/flatDark35.png" id="11_3myqn"]
 [ext_resource type="Script" path="res://script/score_count.gd" id="11_pb80n"]
+[ext_resource type="Texture2D" uid="uid://dmlvw18rwnngf" path="res://sprite/buttons/flatDark36.png" id="12_hsm3m"]
+[ext_resource type="Texture2D" uid="uid://br5pgc7oj7m6r" path="res://sprite/buttons/flatDark37.png" id="13_px4ab"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aifgd"]
 texture = ExtResource("1_rx26m")
@@ -55,7 +58,7 @@ script = ExtResource("1_xxoe3")
 
 [node name="Camera2D" type="Camera2D" parent="game_state_manager"]
 anchor_mode = 0
-zoom = Vector2(0.75, 0.75)
+zoom = Vector2(0.745, 0.745)
 position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
@@ -231,6 +234,7 @@ centered = false
 [node name="Labels" type="Node2D" parent="game_state_manager"]
 
 [node name="Controls" type="Label" parent="game_state_manager/Labels"]
+visible = false
 offset_top = 300.0
 offset_right = 344.0
 offset_bottom = 344.0
@@ -261,3 +265,22 @@ text = "Turn#:
 label_settings = SubResource("LabelSettings_3gkfw")
 vertical_alignment = 1
 script = ExtResource("8_sqolj")
+
+[node name="Android Controls" type="Node2D" parent="game_state_manager"]
+position = Vector2(14, 305)
+scale = Vector2(0.415, 0.415)
+
+[node name="WalkCommand" type="TouchScreenButton" parent="game_state_manager/Android Controls"]
+texture_filter = 2
+texture_normal = ExtResource("11_3myqn")
+action = "Move"
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="game_state_manager/Android Controls"]
+position = Vector2(100, 0)
+texture_normal = ExtResource("12_hsm3m")
+action = "Plant"
+
+[node name="TouchScreenButton3" type="TouchScreenButton" parent="game_state_manager/Android Controls"]
+position = Vector2(200, 0)
+texture_normal = ExtResource("13_px4ab")
+action = "Harvest"

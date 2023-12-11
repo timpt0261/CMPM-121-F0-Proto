@@ -3,7 +3,7 @@ class_name ScoreCount extends Label
 @onready var terrain_map = $"../../TerrainMap"
 
 var score = 0
-var victory_score: int = 0;
+var victory_score: int = 0
 
 func _ready():
 	terrain_map.increment_score.connect(increment_score.bind())
@@ -27,4 +27,4 @@ func game_over():
 func get_victory_score(file_path: String):
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	var dict: Dictionary = JSON.parse_string(file.get_as_text())
-	return dict.get("points_to_win");
+	return dict.get("points_to_win")

@@ -26,6 +26,7 @@ var autosave_start: int  # 60 second in 1 min
 var is_playing: bool
 
 const SAVE_DIRECTORY = "res://save_data/"
+const SAVE_DIRECTORY_ANDROID = "user://"
 const SAVE_FORMAT = ".txt"
 const SAVE_PREFIX = "SAVE-"
 const AUTOSAVE_PREFIX = "AUTOSAVE-"
@@ -38,7 +39,7 @@ var saves_list: PackedStringArray
 func _ready():
 	turn_count.new_turn_signal.connect(new_turn.bind())
 	
-	bind_buttons();
+	bind_buttons()
 
 	save_to_load_index = 0
 	refresh_saves_list()
@@ -72,7 +73,7 @@ func get_save_array() -> SaveFileArray:
 func do_save(save_name: String):
 	game_state_to_array()
 	# Save the PackedByteArray to a file
-	var file = FileAccess.open(SAVE_DIRECTORY + save_name + SAVE_FORMAT, FileAccess.WRITE)
+	var file = FileAccess.open(SAVE_DIRECTORY_ANDROID + save_name + SAVE_FORMAT, FileAccess.WRITE)
 	file.store_buffer(get_save_array().byte_array)
 	file.close()
 	refresh_saves_list()
