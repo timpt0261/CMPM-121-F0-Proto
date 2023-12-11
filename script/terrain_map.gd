@@ -40,29 +40,29 @@ func get_grass(x, y) -> Cell:
 #+------------------------------------------------------------------------------+
 #|                                    Plants                                    |
 #+------------------------------------------------------------------------------+
-func plant_at(plant_position: Vector2i, plant_type_id: int) -> bool:
-	var cell = farm_grid.decode_cell(plant_position)
-	if cell.plant_type_id >= 0:
+func plant_at(plant_position: Vector2i, id: int) -> bool:
+	var cell = farm_grid.decode_cell(plant_position);
+	if cell.get_plant_id() >= 0:
 		return false
-	cell.set_plant(plant_type_id, 0, 0, farm_grid.plant_template_list[plant_type_id])
+	cell.set_plant(id, 0, 0)
 	farm_grid.encode_cell(cell)
 	return true
 
 func harvest_at(plant_position: Vector2i) -> bool:
-	var cell = farm_grid.decode_cell(plant_position)
-	if cell.plant_type_id < 0 || cell.plant_visual_phase < 2:
+	var cell: Cell = farm_grid.decode_cell(plant_position);
+	if cell.get_plant_id() < 0 || cell.plant.get_visual_phase() < 2:
 		return false
-	increment_score.emit(cell.POINTS)
+	increment_score.emit(PlantTemplates.get_templates()[cell.get_plant_id()].points)
 	cell.clear_plant()
 	farm_grid.encode_cell(cell)
 	return true
 
-
-func get_adjacent_plant_ids(plant_position: Vector2i) -> Array:
-	var adjacent_plants = []
+func get_adjacent_plant_ids(plant_position: Vector2i) -> Array[int]:
+	var adjacent_plants: Array[int] = []
 	for cell in farm_grid.get_adjacent_cells(plant_position):
-		adjacent_plants.append(cell.plant_type_id)
-	return adjacent_plants
+		if(cell.get_plant_id() >= 0):
+			adjacent_plants.append(cell.get_plant_id())
+	return adjacent_plants;
 
 #+------------------------------------------------------------------------------+
 #|                                  UTILITIES                                   |

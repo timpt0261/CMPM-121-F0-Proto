@@ -11,13 +11,13 @@ enum layers_IDs {
 const CELL_PIXEL_SIZE = 16
 const PLANT_SPRITES_SIZE = 16
 
-var plant_sprite_dict: Dictionary
+var plant_objs: Dictionary
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	terrain_map.terrain_updated.connect(render_terrain.bind())
-	plant_sprite_dict = {}
+	plant_objs = {}
 
 
 func render_terrain():
@@ -35,40 +35,34 @@ func render_cell(cell: Cell):
 
 
 func update_plant_sprite(cell: Cell):
-	var plant_sprite = get_plant_sprite(cell)
-	if plant_sprite != null && cell.plant_type_id < 0:
-		plant_sprite.queue_free()
-		plant_sprite_dict.erase(cell.position)
-		plant_sprite = null
-	if plant_sprite == null:
+	var plant_obj = get_plant_obj(cell)
+	if plant_obj != null && cell.plant == null:
+		plant_obj.queue_free()
+		plant_objs.erase(cell.position)
+		plant_obj = null
+	if plant_obj == null:
 		return
-	var atlas_tex = AtlasTexture.new()
-	atlas_tex.atlas = load(
-		terrain_map.farm_grid.plant_template_list[cell.plant_type_id].get("sprite")
-	)
-	atlas_tex.region = Rect2(
-		cell.plant_visual_phase * PLANT_SPRITES_SIZE, 0, PLANT_SPRITES_SIZE, PLANT_SPRITES_SIZE
-	)
-	plant_sprite.texture = atlas_tex
+	var atlas_tex = AtlasTexture.new();
+	atlas_tex.atlas = PlantTemplates.get_templates()[cell.get_plant_id()].texture
+	atlas_tex.region = Rect2(cell.plant.get_visual_phase() * PLANT_SPRITES_SIZE, 0, PLANT_SPRITES_SIZE, PLANT_SPRITES_SIZE);
+	plant_obj.texture = atlas_tex;
 
-
-func get_plant_sprite(cell: Cell) -> Sprite2D:
-	if plant_sprite_dict.has(cell.position):
-		return plant_sprite_dict[cell.position]
-	elif cell.plant_type_id >= 0:
-		var plant_sprite = new_plant_sprite(cell)
-		plant_sprite_dict[cell.position] = plant_sprite
-		return plant_sprite
+func get_plant_obj(cell: Cell) -> Sprite2D:
+	if plant_objs.has(cell.position):
+		return plant_objs[cell.position]
+	elif cell.get_plant_id() >= 0:
+		var plant_obj = new_plant_obj(cell)
+		plant_objs[cell.position] = plant_obj
+		return plant_obj
 	else:
 		return null
 
-
-func new_plant_sprite(cell: Cell) -> Sprite2D:
-	var sprite = Sprite2D.new()
-	sprite.name = "Plant: " + str(cell.position)
-	sprite.position = map_to_local(cell.position)
-	add_child(sprite)
-	return sprite
+func new_plant_obj(cell: Cell) -> Sprite2D:
+	var plant_obj = Sprite2D.new()
+	plant_obj.name = "Plant: " + str(cell.position)
+	plant_obj.position = map_to_local(cell.position)
+	add_child(plant_obj)
+	return plant_obj
 
 
 func get_relative_pixel_position(global_pixel_position: Vector2i) -> Vector2i:

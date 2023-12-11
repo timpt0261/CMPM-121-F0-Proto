@@ -63,9 +63,8 @@ func move_from_path():
 
 
 func get_random_plant_id() -> int:
-	var rnd = RandomNumberGenerator.new()
-	return rnd.randi_range(0, terrain_map.farm_grid.plant_template_list.size() - 1)
-
+	var rnd = RandomNumberGenerator.new();
+	return rnd.randi_range(0, PlantTemplates.get_templates().size()-1)
 
 func try_plant_plant(planting_pos: Vector2):
 	var planting_map_pos: Vector2i = terrain_map.pixel_to_grid(planting_pos)
