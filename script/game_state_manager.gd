@@ -26,8 +26,8 @@ var auto_save_length: int = 5
 var autosave_start: int  # 60 second in 1 min
 var is_playing: bool
 
-const SAVE_DIRECTORY = "res://save_data/"
-const SAVE_DIRECTORY_ANDROID = "user://"
+const USER_DIRECTORY = "user://"
+const SAVES_FOLDER = "save_data/"
 const SAVE_FORMAT = ".txt"
 const SAVE_PREFIX = "SAVE-"
 const AUTOSAVE_PREFIX = "AUTOSAVE-"
@@ -41,7 +41,7 @@ func _ready():
 	turn_count.new_turn_signal.connect(new_turn.bind())
 	bind_buttons();
 	
-	language_options.select(3);
+	language_options.select(2);
 	set_language("res://langs/languages.json")
 	
 	save_to_load_index = 0
@@ -76,17 +76,19 @@ func get_save_array() -> SaveFileArray:
 func do_save(save_name: String):
 	game_state_to_array()
 	# Save the PackedByteArray to a file
-	var file = FileAccess.open(SAVE_DIRECTORY_ANDROID + save_name + SAVE_FORMAT, FileAccess.WRITE)
+	var file = open_file(get_new_save_name(SAVE_PREFIX), FileAccess.WRITE)
+	print(file.get_path());
 	file.store_buffer(get_save_array().byte_array)
 	file.close()
 	refresh_saves_list()
 
 
 func do_load():
-	var save_filepath = SAVE_DIRECTORY + save_to_load + SAVE_FORMAT
+	var save_filepath = USER_DIRECTORY + SAVES_FOLDER + save_to_load + SAVE_FORMAT
+	
 	# Read the PackedByteArray from the file
 	if FileAccess.file_exists(save_filepath):
-		var file = FileAccess.open(save_filepath, FileAccess.READ)
+		var file = open_file(save_to_load, FileAccess.READ)
 		var save_file_array = SaveFileArray.from_byte_array(
 			PackedByteArray(file.get_buffer(file.get_length()))
 		)
@@ -154,7 +156,7 @@ func get_new_save_name(prefix: String) -> String:
 	var save_number = 0
 	while true:
 		candidate = prefix + str(save_number)
-		if !FileAccess.file_exists(SAVE_DIRECTORY + candidate + SAVE_FORMAT):
+		if !FileAccess.file_exists(USER_DIRECTORY + SAVES_FOLDER + candidate + SAVE_FORMAT):
 			break
 		save_number += 1
 	return candidate
@@ -168,7 +170,11 @@ func save_scroll(dir: int):
 
 
 func set_save_to_load(index: int):
+	
 	save_to_load_index = index
+	
+	print(save_to_load_index)
+	
 	if save_to_load_index >= 0:
 		save_to_load = saves_list[save_to_load_index].split(".")[0]
 		save_to_load_label.text = save_to_load
@@ -177,13 +183,22 @@ func set_save_to_load(index: int):
 
 
 func refresh_saves_list():
-	saves_list = DirAccess.get_files_at(SAVE_DIRECTORY)
+	var saves_dir_path = USER_DIRECTORY + SAVES_FOLDER
+	if !DirAccess.dir_exists_absolute(saves_dir_path):
+		return
+	saves_list = DirAccess.get_files_at(saves_dir_path)
 	if save_to_load_index < 0:
 		save_to_load_index = 0
 	if save_to_load_index >= saves_list.size():
-		set_save_to_load(saves_list.size() - 1)
+		save_to_load_index = saves_list.size() - 1
 	set_save_to_load(save_to_load_index)
-	
+
+func open_file(file_name: String, mode: int) -> FileAccess:
+	var userDir = DirAccess.open(USER_DIRECTORY)
+	if !userDir.dir_exists(SAVES_FOLDER):
+		userDir.make_dir(SAVES_FOLDER)
+	return FileAccess.open(USER_DIRECTORY + SAVES_FOLDER + file_name + SAVE_FORMAT, mode)
+
 func bind_buttons():
 	save.pressed.connect(manual_save.bind())
 	load.pressed.connect(do_load.bind())
