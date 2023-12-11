@@ -245,6 +245,123 @@ Notably:
 
 Looking back on how we accomplished F2 requirements, I see that fundamentally when it came to understanding the External DSL, it was mainly building on our understanding of how we have set up our game state manager. While with the internal DSL, it was a lot harder to accomplish due to the limitations of the Godot language while also coming to terms with how to truly implement a program that could create the plant types and refactoring the code around them.
 
+## F3 Devlog (12.11.23) [Reuben Chavez]
+
+### F0+F1+F2
+
+There were no significant changes in the game in terms of implementation. However, we did make a notable change to our save and load functionality to work on an Android phone. The original implementation saved its progress within the game files instead of on the user's device.
+
+### Internationalization
+
+Ben created a UI element that could scroll to different languages, referenced by a JSON file with different names and characters for the strings used in the game:
+
+```JSON
+[
+	{
+		"language": "English",
+		"move": "Move",
+		"plant": "Plant",
+		"harvest": "Harvest",
+		"turn": "Turn",
+		"score": "Score",
+		"save": "Save",
+		"load": "Load",
+		"autosave": "AutoSave",
+		"undo": "Undo",
+		"redo": "Redo",
+		"lang": "Language"
+	},
+	{
+		"language": "Español",
+		"move": "Mover",
+		"plant": "Plantar",
+		"harvest": "Cosechar",
+		"turn": "Turno",
+		"score": "Puntos",
+		"save": "Guardar",
+		"load": "Cargar",
+		"autosave": "Autoguardado",
+		"undo": "Deshacer",
+		"redo": "Rehacer",
+		"lang": "Idioma"
+	},
+	{
+		"language": "יידיש",
+		"move": "מאַך",
+		"plant": "פּלאַנט",
+		"harvest": "שניט",
+		"turn": "זוג",
+		"score": "פּונקט",
+		"save": "שפּעיך",
+		"load": "לאַדן",
+		"autosave": "אַווטאָסעיוו",
+		"undo": "אויסרעטן",
+		"redo": "רעטורן",
+		"lang": "שפּראַך",
+	},
+	{
+		"language": "日本語",
+		"move": "動く",
+		"plant": "植える",
+		"harvest": "収穫する",
+		"turn": "番",
+		"score": "点",
+		"save": "セーブ",
+		"load": "ロード",
+		"autosave": "オートセーブ",
+		"undo": "元に戻す",
+		"redo": "やり直し",
+		"lang": "言語",
+	}
+]
+```
+
+Then our game state manager would change the text of all the UI elements to their respective language:
+
+```python
+func init_language_options(file_path: String):
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	lang_data = JSON.parse_string(file.get_as_text())
+
+	for n in range(lang_data.size()):	
+		language_options.add_item(lang_data[n].get("language"))
+	
+	language_options.select(0)
+	
+
+func set_language(id):
+	print("test")
+	
+	var lang: Dictionary = lang_data[id]
+	save.text = lang.get("save")
+	load.text = lang.get("load")
+	score_count.translated_text = lang.get("score")
+	score_count.translate_score()
+	turn_count.translated_text = lang.get("turn")
+	turn_count.translate_turn()
+	undo.text = lang.get("undo")
+	redo.text = lang.get("redo")
+	language_label.text = lang.get("lang")
+	
+	controls_label.text = "Z: " + lang.get("move") + ", X: " + lang.get("plant") + ", C: " + lang.get("harvest");
+	
+```
+
+### Localization
+
+Essentially, we used ChatGPT, DeepLearning, and also our team's knowledge of their native/secondary languages to create the JSON File above. The game supports English, Spanish, Yiddish, and Japanese. The language setting itself can be changed within the game using a tab icon.
+
+### Mobile Installation
+
+Ideally, I followed [Godot's Android export documentation](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html). Essentially, it would build our game as an .apk file, and then using a USB-C cable, I would transfer a zip file of the build to my Android phone, where it would then install. The next challenge was to simply get the buttons that would replace the Z, X, C keys from our keyboard, as well as getting the save and load to work on the phone.
+
+### Mobile Play (Offline)
+
+Since the game was built on a game engine, it didn't require the internet to play to begin with. Unless the project itself needs to be updated, all it requires is access to my laptop to update the game.
+
+## Reflection
+
+I definitely will say I had a larger contribution to this step as I worked on getting the game to install on my phone, giving more confidence as a team member. But also how amazing we strided to basically finish a lot of the project in under a day. I have to praise Ben for having set up the internationalization and localization of our game. As well as Ben and Gabe for having worked on the button Android button configuration as well as modifying the load and save on the phone.
 
 ## Introducing the Team
 
