@@ -5,6 +5,8 @@ class_name ScoreCount extends Label
 var score = 0
 var victory_score: int = 0
 
+var translated_text: String = "Score"
+
 func _ready():
 	terrain_map.increment_score.connect(increment_score.bind())
 	victory_score = get_victory_score("res://data/victory.json")
@@ -14,9 +16,13 @@ func increment_score(increment: int):
 
 func set_score(score: int):
 	self.score = score
-	text = "Score: " + str(self.score)
+	translate_score();
 	if self.score >= victory_score:
 		game_over()
+		
+		
+func translate_score():
+	text = translated_text + ":  " + str(self.score)
 
 func game_over():
 	# Show the game over screen or perform any other game over actions

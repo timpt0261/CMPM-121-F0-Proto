@@ -16,6 +16,8 @@ class_name GameStateManager
 @onready var undo: Button = $"UI/undo"
 @onready var redo: Button = $"UI/redo"
 @onready var language_options: OptionButton = $"UI/LanguageOptions"
+@onready var controls_label: Label = $"Labels/Controls"
+@onready var language_label: Label = $"Labels/Language"
 
 var game_state_stacks: Array[GameStateArray] = []
 var current_snapshot_index: int = -1
@@ -36,13 +38,14 @@ var save_to_load_index: int
 var save_to_load: String
 var saves_list: PackedStringArray
 
+var lang_data
+
 
 func _ready():
 	turn_count.new_turn_signal.connect(new_turn.bind())
-	bind_buttons();
-	
-	language_options.select(2);
-	set_language("res://langs/languages.json")
+	bind_buttons()
+
+	init_language_options("res://langs/languages.json")
 	
 	save_to_load_index = 0
 	refresh_saves_list()
@@ -50,11 +53,9 @@ func _ready():
 	autosave_start = Time.get_unix_time_from_system()
 	is_playing = true
 
-
 func new_turn():
 	game_state_to_array()
 	create_snapshot()
-
 
 func game_state_to_array():
 	game_state_array = GameStateArray.new()
@@ -63,7 +64,6 @@ func game_state_to_array():
 	game_state_array.set_score_count(score_count.score)
 	game_state_array.set_farm_grid(terrain_map.farm_grid)
 
-
 func get_save_array() -> SaveFileArray:
 	var save_file_array = SaveFileArray.new()
 	save_file_array.set_current_snapshot(current_snapshot_index)
@@ -71,7 +71,6 @@ func get_save_array() -> SaveFileArray:
 	for i in game_state_stacks.size():
 		save_file_array.add_snapshot(game_state_stacks[i])
 	return save_file_array
-
 
 func do_save(save_name: String):
 	game_state_to_array()
@@ -206,24 +205,33 @@ func bind_buttons():
 	save_scroll_down.pressed.connect(save_scroll.bind(-1))
 	undo.pressed.connect(do_undo.bind())
 	redo.pressed.connect(do_redo.bind())	
-	language_options.pressed.connect(set_language.bind())
+	language_options.item_selected.connect(set_language.bind())
 	
 	
-func init_language_options():
-	pass
-
-func set_language(file_path: String):
-
+func init_language_options(file_path: String):
 	var file = FileAccess.open(file_path, FileAccess.READ)
-	var lang_data = JSON.parse_string(file.get_as_text())
+	lang_data = JSON.parse_string(file.get_as_text())
+
+	for n in range(lang_data.size()):	
+		language_options.add_item(lang_data[n].get("language"))
 	
-	var lang: Dictionary = lang_data[language_options.get_selected_id()];
-	save.text = lang.get("save");
-	load.text = lang.get("load");
-	score_count.text = lang.get("score");
-	turn_count.text = lang.get("turn");
-	undo.text = lang.get("undo");
-	redo.text = lang.get("redo");
+	language_options.select(0)
 	
+
+func set_language(id):
+	print("test")
+	
+	var lang: Dictionary = lang_data[id]
+	save.text = lang.get("save")
+	load.text = lang.get("load")
+	score_count.translated_text = lang.get("score")
+	score_count.translate_score()
+	turn_count.translated_text = lang.get("turn")
+	turn_count.translate_turn()
+	undo.text = lang.get("undo")
+	redo.text = lang.get("redo")
+	language_label.text = lang.get("lang")
+	
+	controls_label.text = "Z: " + lang.get("move") + ", X: " + lang.get("plant") + ", C: " + lang.get("harvest");
 	
 	
