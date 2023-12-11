@@ -9,10 +9,10 @@
 [ext_resource type="Script" path="res://script/cursor.gd" id="8_pxky3"]
 [ext_resource type="Script" path="res://script/turn_count.gd" id="8_sqolj"]
 [ext_resource type="Script" path="res://script/player.gd" id="9_g7qpm"]
-[ext_resource type="Texture2D" uid="uid://by25b82fnr8uq" path="res://sprite/buttons/flatDark35.png" id="11_3myqn"]
+[ext_resource type="Texture2D" uid="uid://503apat0bq1f" path="res://sprite/buttons/z-button.png" id="11_3aamq"]
 [ext_resource type="Script" path="res://script/score_count.gd" id="11_pb80n"]
-[ext_resource type="Texture2D" uid="uid://dmlvw18rwnngf" path="res://sprite/buttons/flatDark36.png" id="12_hsm3m"]
-[ext_resource type="Texture2D" uid="uid://br5pgc7oj7m6r" path="res://sprite/buttons/flatDark37.png" id="13_px4ab"]
+[ext_resource type="Texture2D" uid="uid://cafok6hh2ficl" path="res://sprite/buttons/x-button.png" id="12_l4rr6"]
+[ext_resource type="Texture2D" uid="uid://bg02x86xk4feg" path="res://sprite/buttons/c-button.png" id="13_20ahr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aifgd"]
 texture = ExtResource("1_rx26m")
@@ -58,7 +58,7 @@ script = ExtResource("1_xxoe3")
 
 [node name="Camera2D" type="Camera2D" parent="game_state_manager"]
 anchor_mode = 0
-zoom = Vector2(0.745, 0.745)
+zoom = Vector2(0.68, 0.68)
 position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
@@ -74,9 +74,11 @@ size_flags_vertical = 8
 
 [node name="background" type="ColorRect" parent="game_state_manager/UI"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = -1
+anchor_right = 1.116
+anchor_bottom = 1.093
+offset_right = 0.0959778
+offset_bottom = 0.00799561
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.188235, 0.188235, 0.188235, 0.960784)
@@ -195,10 +197,9 @@ text = "Redo"
 z_index = 20
 layout_mode = 0
 offset_left = 7.0
-offset_top = 282.0
+offset_top = 307.0
 offset_right = 62.0
-offset_bottom = 313.0
-selected = 0
+offset_bottom = 338.0
 fit_to_longest_item = false
 allow_reselect = true
 
@@ -241,10 +242,10 @@ centered = false
 [node name="Labels" type="Node2D" parent="game_state_manager"]
 
 [node name="Controls" type="Label" parent="game_state_manager/Labels"]
-offset_left = 1.0
-offset_top = 299.0
-offset_right = 345.0
-offset_bottom = 343.0
+offset_left = -24.0
+offset_top = 330.0
+offset_right = 245.0
+offset_bottom = 374.0
 text = "Z: Move, X: Plant, C: Harvest"
 label_settings = SubResource("LabelSettings_nhnr5")
 horizontal_alignment = 1
@@ -275,9 +276,9 @@ script = ExtResource("8_sqolj")
 
 [node name="Language" type="Label" parent="game_state_manager/Labels"]
 offset_left = 5.0
-offset_top = 254.0
-offset_right = 45.0
-offset_bottom = 277.0
+offset_top = 279.0
+offset_right = 84.0
+offset_bottom = 305.0
 text = "Language:"
 
 [node name="Android Controls" type="Node2D" parent="game_state_manager"]
@@ -286,15 +287,19 @@ scale = Vector2(0.415, 0.415)
 
 [node name="WalkCommand" type="TouchScreenButton" parent="game_state_manager/Android Controls"]
 texture_filter = 2
-texture_normal = ExtResource("11_3myqn")
+position = Vector2(568.675, 48.1934)
+scale = Vector2(0.3, 0.3)
+texture_normal = ExtResource("11_3aamq")
 action = "Move"
 
 [node name="TouchScreenButton2" type="TouchScreenButton" parent="game_state_manager/Android Controls"]
-position = Vector2(100, 0)
-texture_normal = ExtResource("12_hsm3m")
+position = Vector2(668.674, -7.22864)
+scale = Vector2(0.3, 0.3)
+texture_normal = ExtResource("12_l4rr6")
 action = "Plant"
 
 [node name="TouchScreenButton3" type="TouchScreenButton" parent="game_state_manager/Android Controls"]
-position = Vector2(200, 0)
-texture_normal = ExtResource("13_px4ab")
+position = Vector2(768.673, 48.1934)
+scale = Vector2(0.3, 0.3)
+texture_normal = ExtResource("13_20ahr")
 action = "Harvest"
