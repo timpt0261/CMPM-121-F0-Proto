@@ -48,7 +48,6 @@ func plant_at(plant_position: Vector2i, plant_type_id: int) -> bool:
 	farm_grid.encode_cell(cell)
 	return true
 
-
 func harvest_at(plant_position: Vector2i) -> bool:
 	var cell = farm_grid.decode_cell(plant_position)
 	if cell.plant_type_id < 0 || cell.plant_visual_phase < 2:
@@ -64,7 +63,6 @@ func get_adjacent_plant_ids(plant_position: Vector2i) -> Array:
 	for cell in farm_grid.get_adjacent_cells(plant_position):
 		adjacent_plants.append(cell.plant_type_id)
 	return adjacent_plants
-
 
 #+------------------------------------------------------------------------------+
 #|                                  UTILITIES                                   |
