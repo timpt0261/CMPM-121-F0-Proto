@@ -3,7 +3,9 @@ class_name ScoreCount extends Label
 @onready var terrain_map = $"../../TerrainMap"
 
 var score = 0
-var victory_score: int = 0;
+var victory_score: int = 0
+
+var translated_text: String = "Score"
 
 func _ready():
 	terrain_map.increment_score.connect(increment_score.bind())
@@ -14,9 +16,13 @@ func increment_score(increment: int):
 
 func set_score(score: int):
 	self.score = score
-	text = "Score: " + str(self.score)
+	translate_score();
 	if self.score >= victory_score:
 		game_over()
+		
+		
+func translate_score():
+	text = translated_text + ":  " + str(self.score)
 
 func game_over():
 	# Show the game over screen or perform any other game over actions
@@ -27,4 +33,4 @@ func game_over():
 func get_victory_score(file_path: String):
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	var dict: Dictionary = JSON.parse_string(file.get_as_text())
-	return dict.get("points_to_win");
+	return dict.get("points_to_win")

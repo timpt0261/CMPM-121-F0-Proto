@@ -1,26 +1,37 @@
 [
 	{
 		"language": "English",
+		"move": "Move",
+		"plant": "Plant",
+		"harvest": "Harvest",
 		"turn": "Turn",
 		"score": "Score",
 		"save": "Save",
 		"load": "Load",
 		"autosave": "AutoSave",
 		"undo": "Undo",
-		"redo": "Redo"
+		"redo": "Redo",
+		"lang": "Language"
 	},
 	{
 		"language": "Español",
+		"move": "Mover",
+		"plant": "Plantar",
+		"harvest": "Cosechar",
 		"turn": "Turno",
 		"score": "Puntos",
 		"save": "Guardar",
 		"load": "Cargar",
 		"autosave": "Autoguardado",
 		"undo": "Deshacer",
-		"redo": "Rehacer"
+		"redo": "Rehacer",
+		"lang": "Idioma"
 	},
 	{
 		"language": "יידיש",
+		"move": "מאַך",
+		"plant": "פּלאַנט",
+		"harvest": "שניט",
 		"turn": "זוג",
 		"score": "פּונקט",
 		"save": "שפּעיך",
@@ -28,9 +39,13 @@
 		"autosave": "אַווטאָסעיוו",
 		"undo": "אויסרעטן",
 		"redo": "רעטורן",
+		"lang": "שפּראַך",
 	},
 	{
 		"language": "日本語",
+		"move": "動く",
+		"plant": "植える",
+		"harvest": "収穫する",
 		"turn": "番",
 		"score": "点",
 		"save": "セーブ",
@@ -38,5 +53,6 @@
 		"autosave": "オートセーブ",
 		"undo": "元に戻す",
 		"redo": "やり直し",
+		"lang": "言語",
 	}
 ]
