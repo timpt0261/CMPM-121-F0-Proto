@@ -23,3 +23,6 @@ GabesGit/
 .github/
 
 save_data/
+builds/
+*.apk
+*.exe
