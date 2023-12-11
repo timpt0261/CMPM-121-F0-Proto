@@ -87,6 +87,165 @@ Autosaving is achieved by checking how much time has passed, and if it goes over
 ### Reflection
 In order to adapt to this requirement our team had to refactor a bit. We ended up storing our byte array in our farm_grid script which handled saving all necessary cell data. We also removed our plant_manager completely, delegating our plant relating tasks to terrain_map.
 
+## F2 Devlog (12.11.23) [Reuben Chavez]
+
+### F0+F1
+
+Our game continues to meet both the requirements for F0 + F1 while still implementing the same game mechanics as required in F0. Additionally, we continue to rely on the packed byte array to save, load, undo, and redo our game state.
+
+### External DSL for Scenario Design
+
+Using a JSON file, we set it up with information for our winning conditions, specifically when the player reaches a score of 100 points.
+
+```JSON
+{
+	"points_to_win": 100
+}
+```
+
+In the game state manager, we read the file and update to see if the conditions are met:
+
+```python
+func _ready():
+	terrain_map.increment_score.connect(increment_score.bind())
+	victory_score = get_victory_score("res://data/victory.json")
+```
+
+### Internal DSL for Plants and Growth Conditions
+
+Gabe created an internal DSL in the same style as the code example Adam gave us. We have a set of methods we can call to write a "program" in the form of a function - you can see that in the `plant_template_programs` list in `PlantTemplates`.
+
+```python
+# plant_template.gd
+class_name PlantTemplate
+
+var id: int
+var name: String
+var points: int
+var texture: Texture2D
+var growth_caps: Array[int]
+var max_turns: int
+var grow: Callable
+
+```
+
+```python
+# plant_templates.gd
+class_name PlantTemplates
+
+static var template_programs: Array[Callable] = [
+    func(dsl: PlantTemplateDSL):
+        dsl.id(0)
+        dsl.name("Daisy")
+        dsl.points(3)
+        dsl.texture(load("res://sprite/daisy.png"))
+        dsl.growth_caps([2, 5, 25])
+        dsl.max_turns(30)
+        dsl.grow(func(ctx: GrowthContext):
+            var water_ratio = ctx.hydration / 100.0
+            if ctx.adjacent_plant_ids.is_empty():
+                return
+            ctx.plant.growth += 3 * (1.0 / ctx.adjacent_plant_ids.size())),
+    func(dsl: PlantTemplateDSL):
+        dsl.id(1)
+        dsl.name("Strawberry")
+        dsl.points(7)
+        dsl.texture(load("res://sprite/strawberry.png"))
+        dsl.growth_caps([2, 6, 25])
+        dsl.max_turns(35)
+        dsl.grow(func(ctx: GrowthContext):
+            var water_ratio = ctx.hydration / 100.0
+            ctx.plant.growth += 3 * (-pow(2 * water_ratio - 1, 2) + 1)
+            print("Total: " + str(ctx.plant.growth))),
+    func(dsl: PlantTemplateDSL):
+        dsl.id(2)
+        dsl.name("Zucchini")
+        dsl.points(5)
+        dsl.texture(load("res://sprite/zucchini.png"))
+        dsl.growth_caps([2, 7, 25])
+        dsl.max_turns(32)
+        dsl.grow(func(ctx: GrowthContext):
+            var water_ratio = ctx.hydration / 100.0
+            var sun_ratio = ctx.sunlight / 100.0
+            if water_ratio > 0.3 || sun_ratio > 0.5:
+                return
+            ctx.plant.growth += 3 * (sun_ratio / 0.5)
+            print("Total: " + str(ctx.plant.growth)))
+]
+static var templates: Array[PlantTemplate] = get_compiled_templates()
+
+static func get_templates() -> Array[PlantTemplate]:
+    return templates
+
+static func get_compiled_templates() -> Array[PlantTemplate]:
+    var templates: Array[PlantTemplate] = []
+    templates.resize(template_programs.size())
+    for i in template_programs.size():
+        templates[i] = PlantTemplateDSLCompiler.compile(template_programs[i])
+    return templates
+
+class PlantTemplateDSLCompiler:
+    static func compile(program: Callable) -> PlantTemplate:
+        var plant_template = PlantTemplate.new()
+        
+        program.call(PlantCompilerDsl.new(plant_template));
+        
+        return plant_template
+    
+class PlantCompilerDsl extends PlantTemplateDSL:
+    var plant_template: PlantTemplate
+    
+    func _init(plant_template):
+        self.plant_template = plant_template
+        
+    func id(id: int):
+        plant_template.id = id
+    func name(name: String):
+        plant_template.name = name
+    func points(points: int):
+        plant_template.points = points
+    func texture(texture: Texture2D):
+        plant_template.texture = texture
+    func growth_caps(growth_caps: Array[int]):
+        plant_template.growth_caps = growth_caps
+    func max_turns(max_turns: int):
+        plant_template.max_turns = max_turns
+    func grow(grow: Callable):
+        plant_template.grow = grow
+```
+
+```python
+# plant_template_dsl.gd
+class_name PlantTemplateDSL
+
+func id(id: int):
+    assert(false, "name() is an abstract function")
+func name(name: String):
+    assert(false, "name() is an abstract function")
+func points(points: int):
+    assert(false, "points() is an abstract function")
+func texture(texture: Texture2D):
+    assert(false, "texture() is an abstract function")
+func growth_caps(growth_caps: Array[int]):
+    assert(false, "growth_caps() is an abstract function")
+func max_turns(max_turns: int):
+    assert(false, "max_turns() is an abstract function")
+func grow(context: Callable):
+    assert(false, "grow() is an abstract function")
+```
+
+The `PlantTemplateCompiler` compiles and runs those programs to build a `PlantTemplate` which stores all shared data of plant types. Each plant type has a grow function which is run each turn. This function determines how each one uniquely grows.
+
+Notably:
+- Daisies grow only if they have a neighboring plant but grow slower if you add more than one.
+- Strawberries like a moderate amount of hydration.
+- Zucchini grows faster with more sun but won't grow if hydration or sunlight goes above 0.3 or 0.5, respectively.
+
+## Reflection
+
+Looking back on how we accomplished F2 requirements, I see that fundamentally when it came to understanding the External DSL, it was mainly building on our understanding of how we have set up our game state manager. While with the internal DSL, it was a lot harder to accomplish due to the limitations of the Godot language while also coming to terms with how to truly implement a program that could create the plant types and refactoring the code around them.
+
+
 ## Introducing the Team
 
 ### Tools Lead - [Reuben Chavez]
