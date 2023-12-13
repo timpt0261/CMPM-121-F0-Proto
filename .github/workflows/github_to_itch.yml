@@ -3,15 +3,15 @@ name: Publish CMPM-121-Final to Itch.io
 on:
  push:
   branches:
-  - main
+  - master
  pull_request:
   branches:
-  - main
+  - master
 env:
  BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }} # Needs to be added through github
  DISCORD_WEBHOOK: ${{secrets.DISCORD_WEBHOOK}} # Needs to be added through github
  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
- IS_MAIN: ${{ contains(github.ref, 'main') }}
+ IS_master: ${{ contains(github.ref, 'master') }}
  PROJECT_NAME: "CMPM-121-Final"
 
 jobs:
@@ -71,7 +71,7 @@ jobs:
   
  Release:
   needs: Export
-  if: ${{ contains(github.ref, 'main') }}
+  if: ${{ contains(github.ref, 'master') }}
   runs-on: ubuntu-latest
   steps:
     - uses: actions/checkout@v2
@@ -128,7 +128,7 @@ jobs:
  
  Publish:
   needs: Release
-  if: ${{ contains(github.ref, 'main') }}
+  if: ${{ contains(github.ref, 'master') }}
   runs-on: ubuntu-latest
   steps:
     - uses: actions/download-artifact@v2
