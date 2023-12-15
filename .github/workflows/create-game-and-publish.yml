@@ -74,56 +74,56 @@ jobs:
   runs-on: ubuntu-latest
   steps:
     - uses: actions/checkout@v2
-   
+
     - name: Version
       id: tag_version
       uses: mathieudutour/github-tag-action@v5.6
       with:
-       github_token: ${{ secrets.GH_CREDENTIALS }}
-    
+        github_token: ${{ secrets.GH_CREDENTIALS }}
+
     - name: Verify Tag
       if: ${{ !steps.tag_version.outputs.new_tag }}
       run: exit 1
-    
+
     - name: Download Exports
-      uses: actions/download-artifact@v4.0.0
+      uses: actions/download-artifact@v2
       with:
-       name: exports
-       path: exports
-    
+        name: exports  # Use the same case as in the Export job
+        path: exports
+
     - name: Zip
       run: zip -r release-${{ steps.tag_version.outputs.new_tag }}.zip exports
-    
+
     - name: Create Github Release
       id: create_release
       uses: actions/create-release@v1
       env:
-       GH_CREDENTIALS: ${{ secrets.GH_CREDENTIALS }}
+        GH_CREDENTIALS: ${{ secrets.GH_CREDENTIALS }}
       with:
-       tag_name: ${{ steps.tag_version.outputs.new_tag }}
-       release_name: Release ${{ steps.tag_version.outputs.new_tag }}
-       body: ${{ steps.tag_version.outputs.changelog }}
-    
+        tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+        body: ${{ steps.tag_version.outputs.changelog }}
+
     - name: Upload Release Artifact
       uses: actions/upload-release-asset@v1
       env:
-       GH_CREDENTIALS: ${{ secrets.GH_CREDENTIALS }}
+        GH_CREDENTIALS: ${{ secrets.GH_CREDENTIALS }}
       with:
-       upload_url: ${{ steps.create_release.outputs.upload_url }}
-       asset_path: ./release-${{ steps.tag_version.outputs.new_tag }}.zip
-       asset_name: release-${{ steps.tag_version.outputs.new_tag }}.zip
-       asset_content_type: application/zip
-    
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release-${{ steps.tag_version.outputs.new_tag }}.zip
+        asset_name: release-${{ steps.tag_version.outputs.new_tag }}.zip
+        asset_content_type: application/zip
+
     - uses: frdrwrt/write-to-file@v1.3
       with:
-       filepath: ./VERSION.txt
-       content: ${{ steps.tag_version.outputs.new_version }}
-       mode: 0655
-    
+        filepath: ./VERSION.txt
+        content: ${{ steps.tag_version.outputs.new_version }}
+        mode: 0655
+
     - uses: actions/upload-artifact@v2
       with:
-       name: VERSION
-       path: ./VERSION.txt
+        name: VERSION
+        path: ./VERSION.txt
  
  Publish:
   needs: Release
